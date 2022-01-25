@@ -27,7 +27,8 @@ Table of Contents
 | 3.3        | 0.05          | 0.165         | 50                  | 34          | 112.2          | 119.51             |         |
 | 5          | 0.05          | 0.25          | 50                  | 2           | 10             | 10.6               | Standby |
 
-Maximum output power is then 185.5W (when accounting for the tolerance and the ripple).
+- Maximum output power is then 647.7W (adding up all the regular output powers)
+- 100% load is 247Ω (using an output of 400V)
 
 # 2. Stage 1: Boost Converter
 
@@ -51,34 +52,36 @@ requirement)
 
     $L = 2 V_{in} I_{in} \frac{\delta}{f_s}$ because at critical conduction $I_{in} = \frac{1}{2} \Delta i_L$
 
-    Given that the maximum output power $P_{out,max}$ is 336W and the efficiency $\eta$ is 85%, then the maximum input power (which gives the worst case inductor rating) is $395.294W \approx 395W$. The maximum duty cycle is then set such that the output voltage $V_{out}$ is 400V, and the input voltage $V_{in}$ is at a minimum of 100V.
+    Given that the maximum output power $P_{out,max}$ is 647.7W and the efficiency $\eta$ is 85%, then the maximum input power (which gives the worst case inductor rating) is $1114.941kW \approx 1115W$. The maximum duty cycle is then set such that the output voltage $V_{out}$ is 400V, and the input voltage $V_{in}$ is at a minimum of 100V.
 
     $\delta = 1- \frac{V_{in}}{V_{out}} = 75\%$
     
     Consequently, we get the minimum inductor value required to meet the maximum power requirement:
 
-    $L = 2 \times 395.294 \times \frac{0.75}{100k}  \approx 5.93mH$
+    $L = 2 \times 1115 \times \frac{0.75}{100k}  = 16.725mH$
 
 2. Peak and RMS inductor currents
    1. Peak inductor current in steady state, CCM
 
         $I_p = I_{in} + \frac{1}{2} \Delta i_L$
 
-        Continuing from the calculations above, the corresponding input current, accounting for a minimum input voltage $V_{in}$ of 10V, is:
+        Continuing from the calculations above, the corresponding input current, accounting for a minimum input voltage $V_{in}$ of 100V, is:
 
-        $I_{in, max} = \frac{205.8824}{10} = 20.58824A \approx 20.6A$
+        $I_{in, max} = \frac{1115}{100} = 11.15A$
 
         Hence, the peak inductor current is:
 
-        $I_{in, max} = \frac{205.8824}{10} = 20.58824A \approx 20.6A$   
+        $I_{in, max} = \frac{1115}{100} = 11.15A$
 
         The ripple current with the inductor value selected is:
 
-        $\Delta i_L = \frac{V_{in}}{{L}} \frac{\delta}{f_s} = \frac{10}{3.08824m} \frac{0.75}{100k} = 24.28569mA \approx 24.3mA$
+        $\Delta i_L = \frac{V_{in}}{{L}} \frac{\delta}{f_s} = \frac{100}{16.725m} \frac{0.75}{100k} = 44.84305mA \approx 44.84mA$
 
         Finally, the peak inductor current is:
 
         $I_p = 20.6 + 0.5 \times 0.226 \mu = 20.61A$
+
+        > Not fixed yet for new values
 
    2. RMS (average) inductor current in steady state
    
@@ -100,11 +103,11 @@ requirement)
 
     The maximum output current, at a maximum output power $P_{out,max}$ of 336W and output voltage $V_{out}$ of 400V, is:
 
-    $I_{out, max} = \frac{P_{out,max}}{V_{out}} = \frac{336}{400} = 0.84A$
+    $I_{out, max} = \frac{P_{out,max}}{V_{out}} = \frac{1115}{400} = 2.7875A \approx 2.79A$
 
     Given a switching frequency of 100kHz and a maximum voltage ripple $\Delta V_{ESR}$ of 10V (?), then: 
 
-    $C = \frac{\delta I_{out}}{f_s \Delta v_c} = \frac{0.75 \times 0.84}{100k \times 10} = 630nF$
+    $C = \frac{\delta I_{out}}{f_s \Delta v_c} = \frac{0.75 \times 2.79}{100k \times 10} = 2.0925μF \approx 2.09μF$ 
 
 4. Switch and diode selection: Maximum current and voltage blocking capability for switch and diode.
    1. Maximum voltage blocking capability: Both $V_{max} = V_{out}$.
