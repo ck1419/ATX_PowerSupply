@@ -51,13 +51,13 @@ requirement)
 
     $L = 2 V_{in} I_{in} \frac{\delta}{f_s}$ because at critical conduction $I_{in} = \frac{1}{2} \Delta i_L$
 
-    Given that the maximum output power $P_{out,max}$ is 175W and the efficiency $\eta$ is 85%, then the maximum input power (which gives the worst case inductor rating) is $205.8824W \approx 206W$. The maximum duty cycle is then set such that the output voltage $V_{out}$ is 400V, and the input voltage $V_{in}$ is at a minimum of 100V.
+    Given that the maximum output power $P_{out,max}$ is 336W and the efficiency $\eta$ is 85%, then the maximum input power (which gives the worst case inductor rating) is $395.294W \approx 395W$. The maximum duty cycle is then set such that the output voltage $V_{out}$ is 400V, and the input voltage $V_{in}$ is at a minimum of 100V.
 
     $\delta = 1- \frac{V_{in}}{V_{out}} = 75\%$
     
     Consequently, we get the minimum inductor value required to meet the maximum power requirement:
 
-    $L = 2 \times 205.8824 \times \frac{0.75}{100k} = 3.08824mH \approx 3.09mH$
+    $L = 2 \times 395.294 \times \frac{0.75}{100k}  \approx 5.93mH$
 
 2. Peak and RMS inductor currents
    1. Peak inductor current in steady state, CCM
