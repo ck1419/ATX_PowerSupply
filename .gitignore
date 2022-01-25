@@ -1,1 +1,4 @@
 *.raw
+*.log
+*.plt
+*.net
