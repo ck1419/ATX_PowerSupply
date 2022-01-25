@@ -62,7 +62,16 @@ requirement)
         By definition the average input current is the average inductor current. The inductor will need to handle the peak and RMS currents over the full range of $V_{in}$ and $V_{out}$, at the specified switching frequency. The higher the ripple (irrelevant to the average value), the higher the RMS value, which means more heating. 
 
 3. Capacitor sizing: as a function of $\delta$, $f_s$, $I_{out}$ (Load current), $\Delta V_{ESR}$ voltage ripple.
+        
+    $C = \frac{\delta I_{out}}{f_s \Delta v_c}$
+
 4. Switch and diode selection: Maximum current and voltage blocking capability for switch and diode.
+   1. Maximum voltage blocking capability: Both $V_{max} = V_{out}$.
+      1. For the MOSFET: When the MOSFET is OFF,  it is held at $V_{out}$ (plus a small diode drop).
+      2. For the diode: When the MOSFET is ON, the positive terminal is held at a value near ground, and the negative terminal is held at $V_{out}$.
+   2. Maximum current blocking capability: $I_{max} = I_{in} + \frac{1}{2} \Delta i_L$
+        - In both cases, the device will have to block the maximum inductor current since that is the input current.
+
 
 ## 2.3. Open Loop Simulations on LTSpice
 
