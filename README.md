@@ -98,13 +98,13 @@ requirement)
         
     $C = \frac{\delta I_{out}}{f_s \Delta v_c}$
 
-    The maximum output current, at a maximum output power $P_{out,max}$ of 175W and output voltage $V_{out}$ of 40V, is:
+    The maximum output current, at a maximum output power $P_{out,max}$ of 336W and output voltage $V_{out}$ of 400V, is:
 
-    $I_{out, max} = \frac{P_{out,max}}{V_{out}} = \frac{175}{400} = 0.4375A \approx 0.438A$
+    $I_{out, max} = \frac{P_{out,max}}{V_{out}} = \frac{336}{400} = 0.84A$
 
     Given a switching frequency of 100kHz and a maximum voltage ripple $\Delta V_{ESR}$ of 10V (?), then: 
 
-    $C = \frac{\delta I_{out}}{f_s \Delta v_c} = \frac{0.75 \times 0.4375}{100k \times 10} = 328.125nF \approx 328nF$
+    $C = \frac{\delta I_{out}}{f_s \Delta v_c} = \frac{0.75 \times 0.84}{100k \times 10} = 630nF$
 
 4. Switch and diode selection: Maximum current and voltage blocking capability for switch and diode.
    1. Maximum voltage blocking capability: Both $V_{max} = V_{out}$.
