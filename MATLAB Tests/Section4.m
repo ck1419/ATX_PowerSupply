@@ -1,6 +1,6 @@
 % Maximum Output Power is 175W
 
-P_o = 175;
+P_o = 647.7;
 V_o = 400;
 Eff = 0.85;
 f_s = 100e3;

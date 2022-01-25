@@ -39,6 +39,7 @@ Table of Contents
 - $I_{out, max}$ Maximum output current: Set by ATX supply rail requirements in table 1.
 - $\Delta I_{in}$ Input (Inductor) Current ripple: max 7.5% at maximum output power.
 - $f_s$ Switching frequency : > 50 kHz.
+  > Arbitrarily set $f_s$ to 100kHz for simulations.
 - Efficiency > 93% at full load (to have a chance to meet the 85% overall efficiency
 requirement)
 
@@ -52,42 +53,38 @@ requirement)
 
     $L = 2 V_{in} I_{in} \frac{\delta}{f_s}$ because at critical conduction $I_{in} = \frac{1}{2} \Delta i_L$
 
-    Given that the maximum output power $P_{out,max}$ is 647.7W and the efficiency $\eta$ is 85%, then the maximum input power (which gives the worst case inductor rating) is $1114.941kW \approx 1115W$. The maximum duty cycle is then set such that the output voltage $V_{out}$ is 400V, and the input voltage $V_{in}$ is at a minimum of 100V.
+    Given that the maximum output power $P_{out,max}$ is 647.7W and the efficiency $\eta$ is 85%, then the maximum input power (which gives the worst case inductor rating) is $762W$. 
+    
+    The maximum duty cycle is then set such that the output voltage $V_{out}$ is 400V, and the input voltage $V_{in}$ is at a minimum of 100V.
 
     $\delta = 1- \frac{V_{in}}{V_{out}} = 75\%$
     
     Consequently, we get the minimum inductor value required to meet the maximum power requirement:
 
-    $L = 2 \times 1115 \times \frac{0.75}{100k}  = 16.725mH$
+    $L = 2 \times 762 \times \frac{0.75}{100k}  = 11.43mH$
 
 2. Peak and RMS inductor currents
-   1. Peak inductor current in steady state, CCM
+   1. Peak inductor current in steady state, CCM, is by definition:
 
         $I_p = I_{in} + \frac{1}{2} \Delta i_L$
 
         Continuing from the calculations above, the corresponding input current, accounting for a minimum input voltage $V_{in}$ of 100V, is:
 
-        $I_{in, max} = \frac{1115}{100} = 11.15A$
-
-        Hence, the peak inductor current is:
-
-        $I_{in, max} = \frac{1115}{100} = 11.15A$
+        $I_{in, max} = \frac{P_{in}}{V_{in}} = \frac{762}{100} = 7.62A$
 
         The ripple current with the inductor value selected is:
 
-        $\Delta i_L = \frac{V_{in}}{{L}} \frac{\delta}{f_s} = \frac{100}{16.725m} \frac{0.75}{100k} = 44.84305mA \approx 44.84mA$
+        $\Delta i_L = \frac{V_{in}}{{L}} \frac{\delta}{f_s} = \frac{100}{11.43m} \frac{0.75}{100k} = 65.61680mA \approx 65.6mA$
 
-        Finally, the peak inductor current is:
+        With the input and ripple current caluclated, the peak inductor current is therefore:
 
-        $I_p = 20.6 + 0.5 \times 0.226 \mu = 20.61A$
-
-        > Not fixed yet for new values
+        $I_p = 7.62 + 0.5 \times 65.61680m = 7.65281A \approx 7.65A$
 
    2. RMS (average) inductor current in steady state
    
         $I_{RMS} = \frac{I_P}{\sqrt{2}}$
 
-        > This is probably wrong.
+        > This is probably wrong. Or is the RMS value just $I_{in}$?
 
    3. Inductor core size
 
@@ -103,11 +100,11 @@ requirement)
 
     The maximum output current, at a maximum output power $P_{out,max}$ of 336W and output voltage $V_{out}$ of 400V, is:
 
-    $I_{out, max} = \frac{P_{out,max}}{V_{out}} = \frac{1115}{400} = 2.7875A \approx 2.79A$
+    $I_{out, max} = \frac{P_{out,max}}{V_{out}} = \frac{647.7}{400} = 1.61925A \approx 1.62A$
 
     Given a switching frequency of 100kHz and a maximum voltage ripple $\Delta V_{ESR}$ of 10V (?), then: 
 
-    $C = \frac{\delta I_{out}}{f_s \Delta v_c} = \frac{0.75 \times 2.79}{100k \times 10} = 2.0925μF \approx 2.09μF$ 
+    $C = \frac{\delta I_{out}}{f_s \Delta v_c} = \frac{0.75 \times 1.61925}{100k \times 10} = 1.21444 \mu F \approx 1.21 \mu F$ 
 
 4. Switch and diode selection: Maximum current and voltage blocking capability for switch and diode.
    1. Maximum voltage blocking capability: Both $V_{max} = V_{out}$.
@@ -128,7 +125,8 @@ requirement)
    1. 50% load
    2. 100% load
    
-   Since the maximum power delivered $P_{out}$ is 336W, and the output voltage $V_{out}$ is 400V, the associated maximum load is:
+   Since the maximum power delivered $P_{out}$ is 647.7W, and the output voltage $V_{out}$ is 400V, the associated maximum load is:
 
-   $R = \frac{V_{out}^2}{P_{out}} = 476.19047 \Omega \approx 476 \Omega$
+   $R = \frac{V_{out}^2}{P_{out}} = 247.02795 \Omega \approx 247 \Omega$
+   
 4. How converter operates under very low loads.
