@@ -124,4 +124,8 @@ requirement)
 3. Change in loads: very large and small loads (variation of output voltage w.r.t. fixed duty cycle). Stepped load changes between
    1. 50% load
    2. 100% load
+   
+   Since the maximum power delivered $P_{out}$ is 336W, and the output voltage $V_{out}$ is 400V, the associated maximum load is:
+
+   $R = \frac{V_{out}^2}{P_{out}} = 476.19047 \Omega \approx 476 \Omega$
 4. How converter operates under very low loads.
