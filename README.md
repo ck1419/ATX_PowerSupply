@@ -11,14 +11,23 @@ Table of Contents
 
 - Work for mains inputs 100-250V, 50-60Hz
 - Power rails: -5, +5, -12, +12, +3.3
-  - 5V on whenevr mains is plugged in, others on when the computer power switch is pressed.
+  - 5V on whenever mains is plugged in, others on when the computer power switch is pressed.
   - Ripple current and tolerance for supply voltage specified in table 1.
 - Main Stages
   1. Boost converter
   2. Power factor correction stage (ensures that the current waveform pulled from the mains is in phase with, and the same shape as, the voltage waveform)
   3. Flyback converter with multiple secondary windings on the high frequency transformer to generate multiple voltage rails.
 
-![table1](images/table1.png)
+| Supply (V) | Tolerance (%) | Tolerance (V) | Ripple p-p max (mV) | Current (A) | Output Pwr (W) | Max Output Pwr (W) | Notes   |
+| ---------- | ------------- | ------------- | ------------------- | ----------- | -------------- | ------------------ | ------- |
+| 5          | 0.05          | 0.25          | 50                  | 35          | 175            | 185.5              |         |
+| \-5        | 0.1           | 0.5           | 50                  | 0.5         | \-2.5          | \-2.225            |         |
+| 12         | 0.05          | 0.6           | 120                 | 28          | 336            | 356.16             |         |
+| \-12       | 0.1           | 1.2           | 120                 | 1           | \-12           | \-10.68            |         |
+| 3.3        | 0.05          | 0.165         | 50                  | 34          | 112.2          | 119.51             |         |
+| 5          | 0.05          | 0.25          | 50                  | 2           | 10             | 10.6               | Standby |
+
+Maximum output power is then 185.5W (when accounting for the tolerance and the ripple).
 
 # 2. Stage 1: Boost Converter
 
@@ -42,16 +51,40 @@ requirement)
 
     $L = 2 V_{in} I_{in} \frac{\delta}{f_s}$ because at critical conduction $I_{in} = \frac{1}{2} \Delta i_L$
 
+    Given that the maximum output power $P_{out,max}$ is 175W and the efficiency $\eta$ is 85%, then the maximum input power (which gives the worst case inductor rating) is $205.8824W \approx 206W$. The maximum duty cycle is then set such that the output voltage $V_{out}$ is 40V, and the input voltage $V_{in}$ is at a minimum of 10V.
+
+    $\delta = 1- \frac{V_{in}}{V_{out}} = 97.5\%$
+    
+    Consequently, we get the minimum inductor value required to meet the maximum power requirement:
+
+    $L = 2 \times 205.8824 \times \frac{0.975}{100k} = 4.01471mH \approx 4.015mH$
+
 2. Peak and RMS inductor currents
    1. Peak inductor current in steady state, CCM
 
         $I_p = I_{in} + \frac{1}{2} \Delta i_L$
 
-        > Don't I need the input or output current value for this?
+        Continuing from the calculations above, the corresponding input current, accounting for a minimum input voltage $V_{in}$ of 10V, is:
+
+        $I_{in, max} = \frac{205.8824}{10} = 20.58824A \approx 20.6A$
+
+        Hence, the peak inductor current is:
+
+        $I_{in, max} = \frac{205.8824}{10} = 20.58824A \approx 20.6A$   
+
+        The ripple current with the inductor value selected is:
+
+        $\Delta i_L = \frac{V_{in}}{{L}} \frac{\delta}{f_s} = \frac{10}{4.01471m} \frac{0.975}{100k} = 24.28569mA \approx 24.3mA$
+
+        Finally, the peak inductor current is:
+
+        $I_p = 20.6 + 0.5 \times 0.226 \mu = 20.61A$
 
    2. RMS (average) inductor current in steady state
    
         $I_{RMS} = \frac{I_P}{\sqrt{2}}$
+
+        > This is probably wrong.
 
    3. Inductor core size
 
@@ -64,6 +97,14 @@ requirement)
 3. Capacitor sizing: as a function of $\delta$, $f_s$, $I_{out}$ (Load current), $\Delta V_{ESR}$ voltage ripple.
         
     $C = \frac{\delta I_{out}}{f_s \Delta v_c}$
+
+    The maximum output current, at a maximum output power $P_{out,max}$ of 175W and output voltage $V_{out}$ of 40V, is:
+
+    $I_{out, max} = \frac{P_{out,max}}{V_{out}} = \frac{175}{400} = 0.4375A \approx 0.438A$
+
+    Given a switching frequency of 100kHz and a maximum voltage ripple $\Delta V_{ESR}$ of 10V (?), then: 
+
+    $C = \frac{\delta I_{out}}{f_s \Delta v_c} = \frac{0.975 \times 0.4375}{100k \times 10} = 426.5626nF \approx 427nF$
 
 4. Switch and diode selection: Maximum current and voltage blocking capability for switch and diode.
    1. Maximum voltage blocking capability: Both $V_{max} = V_{out}$.
