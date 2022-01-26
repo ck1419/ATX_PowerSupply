@@ -117,11 +117,21 @@ requirement)
 ## 2.3. Open Loop Simulations on LTSpice
 
 1. Efficiency in required range of operating conditions
-2. Startup behaviour (assuming output capacitor and inductor are in a discharged state). Transfer function
+
+    | $V_{in}$ (V) | $I_{in}$ (A) | $V_{out}$ (V) | $I_{out}$ (A) | Efficiency $\eta$ |
+    | ------------- | ------------- | -------------- | -------------- | ------------------ |
+    | 100           | 13.1896       | 387.168        | 3.05805        | 0.897661114        |
+    | 100           | 11.3059       | 397.968        | 2.61953        | 0.922075301        |
+    | 100           | 9.83076       | 402.207        | 2.27516        | 0.930838794        |
+    | 100           | 8.69834       | 405.423        | 2.01082        | 0.937227881        |
+    | 100           | 7.80164       | 407.952        | 1.80152        | 0.942024609        |
+    | 100           | 7.074         | 409.983        | 1.63169        | 0.94566746         |
+
+3. Startup behaviour (assuming output capacitor and inductor are in a discharged state). Transfer function
    1. Percentage overshoot of output voltage
    2. Rise and settling time of output voltage
    3. Oscillation frequency of output voltage
-3. Change in loads: very large and small loads (variation of output voltage w.r.t. fixed duty cycle). Stepped load changes between
+4. Change in loads: very large and small loads (variation of output voltage w.r.t. fixed duty cycle). Stepped load changes between
    1. 50% load
    2. 100% load
    
