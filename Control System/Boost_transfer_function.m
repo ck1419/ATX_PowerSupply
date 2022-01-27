@@ -75,6 +75,9 @@ y = [Y; y];
 %% Results
 
 
+% Boost Transfer Function
+[boost_tf_upper, boost_tf_lower] = ss2tf(A,B,C,0);
+
 % Plot results
 subplot(3,1,1)
 plot([0, 0.15, 0.1501, 0.2], [Delta, Delta, Delta+StepSize, Delta+StepSize])
