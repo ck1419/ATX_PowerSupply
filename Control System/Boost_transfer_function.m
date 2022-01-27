@@ -77,6 +77,7 @@ y = [Y; y];
 
 % Boost Transfer Function
 [boost_tf_upper, boost_tf_lower] = ss2tf(A,B,C,0);
+boost_tf = tf(boost_tf_upper, boost_tf_lower);
 
 % Plot results
 subplot(3,1,1)
@@ -99,4 +100,9 @@ plot(T,y)
 xlabel("Time [s]")
 ylabel("Voltage [V]")
 title("Voltage Output")
+grid on;
+
+%Pre-step Bode Plot
+figure(2);
+bode(boost_tf);
 grid on;
