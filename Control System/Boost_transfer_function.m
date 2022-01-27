@@ -10,9 +10,9 @@ clc;
 % u=[delta]; x=[i_L; v_C]; y=[v_O]
 % Component Parameters
 L = 11.43e-3; 
-r_L = 0.05; 
+r_L = 0; 
 C = 1.21e-6; 
-r_C = 0.02; 
+r_C = 0; 
 R = 247;
 
 
@@ -106,3 +106,7 @@ grid on;
 figure(2);
 bode(boost_tf);
 grid on;
+
+% Finds values starting from 0
+% 5% Settling Threshold
+startUpInfo = stepinfo(boost_tf, 'SettlingTimeThreshold', 0.05)
