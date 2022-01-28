@@ -15,7 +15,6 @@ C = 1.21e-6;
 r_C = 0; 
 R = 247;
 
-
 % Circuit Conditions
 V_I = 100; 
 Delta = 0.75;
@@ -110,3 +109,22 @@ grid on;
 % Finds values starting from 0
 % 5% Settling Threshold
 startUpInfo = stepinfo(boost_tf, 'SettlingTimeThreshold', 0.05)
+
+%% Manually find settling time, rise time (10-90%), settling time(5%)
+
+% G(s) = a/  (bs^2 + c^s + d)
+a = boost_tf_upper(3);
+b = boost_tf_lower(1);
+c = boost_tf_lower(2);
+d = boost_tf_lower(3);
+
+% Using the general form of a second order transfer function
+w_n = sqrt(d); % natural frequency
+zeta = c/2/w_n; % damping ratio
+varrho = a;
+mu = varrho/w_n^2;
+
+t_settle = 3/(w_n*zeta); % by approx from Parisini's Y2 Control Course
+pc_overshoot = 100*exp(-zeta*pi/sqrt(1-zeta^2));
+t_delay = (1+0.7*zeta)/w_n; % reach half its final value
+t_rise = pi/t_delay;
