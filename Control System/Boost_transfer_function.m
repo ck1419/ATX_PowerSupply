@@ -128,3 +128,4 @@ t_settle = 3/(w_n*zeta); % by approx from Parisini's Y2 Control Course
 pc_overshoot = 100*exp(-zeta*pi/sqrt(1-zeta^2));
 t_delay = (1+0.7*zeta)/w_n; % reach half its final value
 t_rise = pi/t_delay;
+oscillation_f = w_n * sqrt(1-zeta^2)/2/pi;
