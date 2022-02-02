@@ -62,6 +62,8 @@ requirement)
     Consequently, we get the minimum inductor value required to meet the maximum power requirement:
 
     $L = 2 \times 762 \times \frac{0.75}{100k}  = 11.43mH$
+    
+> We note that the maximum inductor value calculated using the DCM/CCM boundary condition is significantly larger than that required by the 7.5% ripple current ripple at maximum output power condition. For example, the largest input current is $762/100 = 7.62A$, which gives a ripple of $7.62 \times 0.075 = 571.5mA$, and hence a less stringent inductance size requirement.
 
 2. Peak and RMS inductor currents
    1. Peak inductor current in steady state, CCM, is by definition:
@@ -87,6 +89,8 @@ requirement)
    3. Inductor core size
 
         $L = \frac{N^2 \mu A}{l}$
+        
+        Closed loop core (toroid) vs solenoid and air core.
 
    4. Why is this (peak and RMS current) important?
 
@@ -215,7 +219,20 @@ Measurement: il_avg
     | 222.3                   | 100           | 7.80164       | 400.479        | 1.80152        | 0.92476829         |
     | 247                     | 100           | 7.074         | 403.027        | 1.63169        | 0.929622739        |
     
+    > Old resitive loads, kept in case
+    
     The efficiency is largely above 85% for loads between 50% and 100%, which agrees with the inputs defined to determine the inductor and capacitor values.
+
+    | Power Load % | Resistor Value |
+    | ------------ | -------------- |
+    | 100          | 247.0          |
+    | 90           | 274.5          |
+    | 80           | 208.8          |
+    | 70           | 352.9          |
+    | 60           | 411.7          |
+    | 50           | 494.1          |
+    
+    > New resistor values, finish table with actual values once inductor value calculated
 
 3. Startup behaviour (assuming output capacitor and inductor are in a discharged state).
 
@@ -258,6 +275,8 @@ Measurement: il_avg
    Since the maximum power delivered $P_{out}$ is 647.7W, and the output voltage $V_{out}$ is 400V, the associated maximum load is:
 
    $R = \frac{V_{out}^2}{P_{out}} = 247.02795 \Omega \approx 247 \Omega$
+   
+   
    
 5. How converter operates under very low loads.
 
