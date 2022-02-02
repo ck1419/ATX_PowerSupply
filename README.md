@@ -220,6 +220,7 @@ Measurement: il_avg
     | 247                     | 100           | 7.074         | 403.027        | 1.63169        | 0.929622739        |
     
     > Old resitive loads, kept in case
+    > Old 100% load actually gave an output power of 657.6W
     
     The efficiency is largely above 85% for loads between 50% and 100%, which agrees with the inputs defined to determine the inductor and capacitor values.
 
@@ -227,7 +228,7 @@ Measurement: il_avg
     | ------------ | -------------- |
     | 100          | 247.0          |
     | 90           | 274.5          |
-    | 80           | 208.8          |
+    | 80           | 308.8          |
     | 70           | 352.9          |
     | 60           | 411.7          |
     | 50           | 494.1          |
