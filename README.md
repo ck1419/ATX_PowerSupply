@@ -59,34 +59,37 @@ requirement)
 
     $\delta = 1- \frac{V_{in}}{V_{out}} = 75\%$
     
-    Consequently, we get the minimum inductor value required to meet the maximum power requirement:
-
-    $L = 2 \times 762 \times \frac{0.75}{100k}  = 11.43mH$
+    To get the minimum inductor value required to meet the maximum power requirement, we first calculate the largest input current, which is:
     
-> We note that the maximum inductor value calculated using the DCM/CCM boundary condition is significantly larger than that required by the 7.5% ripple current ripple at maximum output power condition. For example, the largest input current is $762/100 = 7.62A$, which gives a ripple of $7.62 \times 0.075 = 571.5mA$, and hence a less stringent inductance size requirement.
+    $I_{in, max} = \frac{P_{in}}{V_{in}} = 762/100 = 7.62A$
+    
+    
+    We need to ensure that the ripple current does not exceed 7.5% of the input current:
+     
+     $\Delta i_L = 7.62 \times 0.075 = 571.5mA$
+     
+     Hence the inductance size requirement is:
+
+    $L = \frac{V_{in}}{{\Delta i_L}} \frac{\delta}{f_s} = \frac{100}{571.5m} \frac{0.75}{100k} = 1.31234 \approx 1.31mH$
+    
+> We note that the maximum inductor value calculated using the DCM/CCM boundary condition ($L = 2 \times 762 \times \frac{0.75}{100k}  = 11.43mH$) is significantly larger than that required by the 7.5% ripple current ripple at maximum output power condition.
 
 2. Peak and RMS inductor currents
    1. Peak inductor current in steady state, CCM, is by definition:
 
         $I_p = I_{in} + \frac{1}{2} \Delta i_L$
 
-        Continuing from the calculations above, the corresponding input current, accounting for a minimum input voltage $V_{in}$ of 100V, is:
+        Therefore:
 
-        $I_{in, max} = \frac{P_{in}}{V_{in}} = \frac{762}{100} = 7.62A$
-
-        The ripple current with the inductor value selected is:
-
-        $\Delta i_L = \frac{V_{in}}{{L}} \frac{\delta}{f_s} = \frac{100}{11.43m} \frac{0.75}{100k} = 65.61680mA \approx 65.6mA$
-
-        With the input and ripple current caluclated, the peak inductor current is therefore:
-
-        $I_p = 7.62 + 0.5 \times 65.61680m = 7.65281A \approx 7.65A$
+        $I_p = 7.62 + 0.5 \times 571.5m = 7.90575A \approx 7.91A$
 
    2. RMS (average) inductor current in steady state
    
-        $I_{RMS} = \frac{\Delta i_L}{\sqrt{3}} + I_P - \Delta i_L = \frac{65.6m}{\sqrt{3}} + 7.65 - 65.6m = 7.62227 \approx 7.62A$
+        $I_{RMS} = \frac{\Delta i_L}{\sqrt{3}} + I_P - \Delta i_L = \frac{571.5m}{\sqrt{3}} + 7.90575 - 571.5m = 7.68703 \approx 7.69A$
 
    3. Inductor core size
+
+        Relevant Equations
 
         $L = \frac{N^2 \mu A}{l}$
         
