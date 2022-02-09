@@ -1,4 +1,4 @@
-clear all;
+clear;
 close all;
 clc;
 
@@ -9,7 +9,7 @@ clc;
 % State-space average model of a Boost Converter
 % u=[delta]; x=[i_L; v_C]; y=[v_O]
 % Component Parameters
-L = 11.43e-3; 
+L = 1.31e-3; 
 r_L = 0; 
 C = 1.21e-6; 
 r_C = 0; 
@@ -22,6 +22,12 @@ Delta = 0.75;
 
 % Modeling Conditions
 StepSize = 0.05;
+
+
+% Lead-Lag TF
+controllerZero = 0;
+controllerPole = 0;
+gain = 1;
 
 
 %% Model
@@ -73,10 +79,14 @@ y = [Y; y];
 
 %% Results
 
+% Control System
+controller_tf = tf([1 -controllerZero], [1 -controllerPole]) * gain;
 
 % Boost Transfer Function
 [boost_tf_upper, boost_tf_lower] = ss2tf(A,B,C,0);
-boost_tf = tf(boost_tf_upper, boost_tf_lower);
+boost_tf_noController = tf(boost_tf_upper, boost_tf_lower);
+boost_tf = boost_tf_noController * controller_tf;
+
 
 % Plot results
 subplot(3,1,1)
@@ -104,6 +114,13 @@ grid on;
 %Pre-step Bode Plot
 figure(2);
 bode(boost_tf);
+title("Pre-Step Bode Diagram");
+grid on;
+
+%Pre-step Root Locus
+figure(3);
+rlocus(boost_tf);
+title("Pre-Step Root Locus")
 grid on;
 
 % Finds values starting from 0
