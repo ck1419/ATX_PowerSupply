@@ -26,8 +26,8 @@ StepSize = 0.05;
 
 % PID TF
 Controller_P = 1;
-Controller_I = 1;
-Controller_D = 1;
+Controller_I = 0;
+Controller_D = 0;
 Gain = 1;
 
 
