@@ -58,13 +58,12 @@ boost_ss = ss(A,E,C,F);
 
 
 % Control System
-controller_tf = tf([1 -controllerZero], [1 -controllerPole]);
+controller_tf = tf([1 -controllerZero], [1 -controllerPole]) * gain;
 
 % Boost Transfer Function
 [boost_tf_upper, boost_tf_lower] = ss2tf(A,B,C,0);
-boost_tf_noController_ol = tf(boost_tf_upper, boost_tf_lower);
-boost_tf_ol = series(boost_tf_noController_ol, controller_tf);
-boost_tf = feedback(boost_tf_ol*gain, 1);
+boost_tf_noController = tf(boost_tf_upper, boost_tf_lower);
+boost_tf = series(boost_tf_noController, controller_tf);
 
 %% Unit Step Delta
 
@@ -87,7 +86,7 @@ y = [Y; y];
 
 %% Results
 
-% Delta unit-step
+% Plot results
 subplot(3,1,1)
 plot([0, 0.15, 0.1501, 0.2], [Delta, Delta, Delta+StepSize, Delta+StepSize])
 ylim([Delta-0.05 Delta+0.05+StepSize]);
@@ -125,7 +124,6 @@ grid on;
 % Finds values starting from 0
 % 5% Settling Threshold
 startUpInfo = stepinfo(boost_tf, 'SettlingTimeThreshold', 0.05)
-
 
 %% Manually find settling time, rise time (10-90%), settling time(5%)
 
