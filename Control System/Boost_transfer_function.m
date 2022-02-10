@@ -24,10 +24,11 @@ Delta = 0.75;
 StepSize = 0.05;
 
 
-% Lead-Lag TF
-controllerZero = 0;
-controllerPole = 0;
-gain = 1;
+% PID TF
+Controller_P = 1;
+Controller_I = 1;
+Controller_D = 1;
+Gain = 1;
 
 
 %% Model
@@ -58,13 +59,13 @@ boost_ss = ss(A,E,C,F);
 
 
 % Control System
-controller_tf = tf([1 -controllerZero], [1 -controllerPole]);
+controller_tf = pid(Controller_P, Controller_I, Controller_D);
 
 % Boost Transfer Function
 [boost_tf_upper, boost_tf_lower] = ss2tf(A,B,C,0);
 boost_tf_noController_ol = tf(boost_tf_upper, boost_tf_lower);
 boost_tf_ol = series(boost_tf_noController_ol, controller_tf);
-boost_tf = feedback(boost_tf_ol*gain, 1);
+boost_tf = feedback(boost_tf_ol*Gain, 1);
 
 %% Unit Step Delta
 
