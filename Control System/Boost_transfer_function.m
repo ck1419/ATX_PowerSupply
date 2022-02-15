@@ -24,11 +24,12 @@ Delta = 0.75;
 StepSize = 0.05;
 
 
-% PID TF
-Controller_P = 1;
-Controller_I = 0;
-Controller_D = 0;
-Gain = 1;
+% Controller
+controllerZero = -5000;
+controllerPole = -50000;
+% kP = 1000;
+% kI = 10000;
+gain = 7.7;
 
 
 %% Model
@@ -59,13 +60,17 @@ boost_ss = ss(A,E,C,F);
 
 
 % Control System
-controller_tf = pid(Controller_P, Controller_I, Controller_D);
+controller_tf = tf([1 -controllerZero], [1 -controllerPole]);
+% controller_tf = pid(kP,kI,0);
 
 % Boost Transfer Function
 [boost_tf_upper, boost_tf_lower] = ss2tf(A,B,C,0);
 boost_tf_noController_ol = tf(boost_tf_upper, boost_tf_lower);
 boost_tf_ol = series(boost_tf_noController_ol, controller_tf);
-boost_tf = feedback(boost_tf_ol*Gain, 1);
+boost_tf = feedback(boost_tf_ol*gain, 1);
+
+boost_ss_ol = series(boost_ss, controller_tf);
+boost_ss_cl = feedback(boost_ss_ol*gain, 1);
 
 %% Unit Step Delta
 
@@ -119,8 +124,18 @@ grid on;
 
 %Pre-step Root Locus
 figure(3);
-rlocus(boost_tf);
+rlocus(boost_tf_ol);
 title("Pre-Step Root Locus")
+grid on;
+
+figure(4);
+step(boost_tf, 2e-3)
+title("tf cl step")
+grid on;
+
+figure(5);
+step(boost_ss_cl, 2e-3)
+title("ss cl step")
 grid on;
 
 % Finds values starting from 0
