@@ -173,19 +173,19 @@ grid on;
 movegui('southwest');
 
 figure(8);
-rlocus(k*pi_boost_cl, 2e-3);
+rlocus(pi_boost_cl, 2e-3);
 title("Pre-Step Root Locus - Closed loop, with PI controller")
 grid on;
 movegui('south');
 
 figure(9);
-bode(k*pi_boost_cl);
+bode(pi_boost_cl);
 title("Pre-Step Bode Diagram - Closed loop, with PI controller")
 grid on;
 movegui('southeast');
 
 figure(10);
-step(k*pi_boost_cl, 10e-3)
+step(pi_boost_cl, 10e-3)
 title("Closed loop (PI) step response - From TF")
 grid on;
 
