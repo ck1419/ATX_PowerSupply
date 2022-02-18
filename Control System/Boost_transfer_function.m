@@ -20,30 +20,23 @@ R = 247;
 V_I = 100; 
 Delta = 0.75;
 
-
 % Modeling Conditions
 StepSize = 0.05;
 
-
-% Controller
 % factor = 2.65;
-% controllerZero = 60000*2*pi;
-% controllerPole = 0;
+% controllerZero = 8e3;
+% controllerPole = -controllerZero*factor;
 % gain = 0.00083;
-
-factor = 2.65;
-controllerZero = 8e3;
-controllerPole = -controllerZero*factor;
-gain = 0.00083;
 
 % Same lead lag controller as Buck Example
 % controllerPole =1/(2*pi*1e4)
 % controllerZero =1/(2*pi*3e3)
 
-
-kP = 0.00005;
-kI = 0.5;
-
+% PI Controller
+kP = 0;
+kI = 1;
+T = 0.02;
+gain = 1;
 
 %% Model
 
@@ -83,15 +76,15 @@ boost_ss = ss(A, E, C, F);
 boost_tf = tf(boost_tf_upper, boost_tf_lower);
 
 %% Lead lag controller
-LL_controller_tf = tf([1 -controllerZero], [1 -controllerPole]); % Lead lag controller
-LL_boost_tf_ol = series(boost_tf, LL_controller_tf);
-LL_boost_tf_cl = feedback(LL_boost_tf_ol*gain, 1);
-LL_boost_ss_ol = series(boost_ss, LL_controller_tf);
-LL_boost_ss_cl = feedback(LL_boost_ss_ol*gain, 1);
+% LL_controller_tf = tf([1 -controllerZero], [1 -controllerPole]); % Lead lag controller
+% LL_boost_tf_ol = series(boost_tf, LL_controller_tf);
+% LL_boost_tf_cl = feedback(LL_boost_tf_ol*gain, 1);
+% LL_boost_ss_ol = series(boost_ss, LL_controller_tf);
+% LL_boost_ss_cl = feedback(LL_boost_ss_ol*gain, 1);
 
 % PI Controller
 % pi_controller = pid(kP, kI, 0);
-pi_controller = tf([0 1], [0.002 0]);
+pi_controller = tf([(kI*T) kP], [T 0]);
 pi_boost = series(pi_controller, boost_ss);
 pi_boost_cl = feedback(gain*pi_boost, 1);
 
@@ -114,92 +107,92 @@ y = [Y; y];
 
 %% Results
 
-% Delta unit-step
-figure(1);
-subplot(3,1,1)
-plot([0, 0.15, 0.1501, 0.2], [Delta, Delta, Delta+StepSize, Delta+StepSize])
-ylim([Delta-0.05 Delta+0.05+StepSize]);
-xlabel("Time [s]")
-ylabel("Duty Cycle")
-title("Delta Input")
-grid on;
-
-subplot(3,1,2)
-plot(T,iL)
-xlabel("Time [s]")
-ylabel("Current [A]")
-title("Current Output")
-grid on;
-
-subplot(3,1,3)
-plot(T,y)
-xlabel("Time [s]")
-ylabel("Voltage [V]")
-title("Voltage Output")
-grid on;
-movegui('northwest');
-
-% Pre-step Bode Plot
-figure(2);
-bode(boost_tf);
-title("Bode plot for Boost converter - Open loop, no controller");
-grid on;
-movegui('north');
-
-figure(3);
-rlocus(boost_tf);
-title("Root Locus for Boost converter - Closed loop, no controller");
-grid on;
-movegui('northeast');
-
-figure(4);
-step(boost_tf, 10e-3)
-title("Open loop step response - no controller")
-grid on;
-movegui('west');
+% % Delta unit-step
+% figure(1);
+% subplot(3,1,1)
+% plot([0, 0.15, 0.1501, 0.2], [Delta, Delta, Delta+StepSize, Delta+StepSize])
+% ylim([Delta-0.05 Delta+0.05+StepSize]);
+% xlabel("Time [s]")
+% ylabel("Duty Cycle")
+% title("Delta Input")
+% grid on;
+% 
+% subplot(3,1,2)
+% plot(T,iL)
+% xlabel("Time [s]")
+% ylabel("Current [A]")
+% title("Current Output")
+% grid on;
+% 
+% subplot(3,1,3)
+% plot(T,y)
+% xlabel("Time [s]")
+% ylabel("Voltage [V]")
+% title("Voltage Output")
+% grid on;
+% movegui('northwest');
+% 
+% % Pre-step Bode Plot
+% figure(2);
+% bode(boost_tf);
+% title("Bode plot for Boost converter - Open loop, no controller");
+% grid on;
+% movegui('north');
+% 
+% figure(3);
+% rlocus(boost_tf);
+% title("Root Locus for Boost converter - Closed loop, no controller");
+% grid on;
+% movegui('northeast');
+% 
+% figure(4);
+% step(boost_tf, 10e-3)
+% title("Open loop step response - no controller")
+% grid on;
+% movegui('west');
 
 %%%%%% Lead lag %%%%%%
-figure(5);
-rlocus(LL_boost_tf_ol);
-title("Pre-Step Root Locus - Closed loop, with lead lag controller")
-xlim([-1e5, 0.5e5]);
-grid on;
-
-figure(6);
-bode(LL_boost_tf_cl);
-title("Pre-Step Bode Diagram - Closed loop, with lead lag controller")
-grid on;
-movegui('east');
-
-figure(7);
-step(LL_boost_tf_cl, 10e-3)
-title("Closed loop (Lead Lag) step response - From TF")
-grid on;
-movegui('southwest');
-
-% figure(8);
-% rlocus(pi_boost);
-% title("Pre-Step Root Locus - Closed loop, with PI controller")
+% figure(5);
+% rlocus(LL_boost_tf_ol);
+% title("Pre-Step Root Locus - Closed loop, with lead lag controller")
+% xlim([-1e5, 0.5e5]);
 % grid on;
-% xlim([-2e4, 1e4]);
-% movegui('south');
 % 
-% figure(9);
-% bode(pi_boost_cl);
-% title("Pre-Step Bode Diagram - Closed loop, with PI controller")
+% figure(6);
+% bode(LL_boost_tf_cl);
+% title("Pre-Step Bode Diagram - Closed loop, with lead lag controller")
 % grid on;
-% movegui('southeast');
+% movegui('east');
 % 
-% figure(10);
-% step(pi_boost_cl, 50e-3)
-% title("Closed loop (PI) step response - From TF")
+% figure(7);
+% step(LL_boost_tf_cl, 10e-3)
+% title("Closed loop (Lead Lag) step response - From TF")
 % grid on;
+% movegui('southwest');
+
+figure(8);
+rlocus(pi_boost);
+title("Pre-Step Root Locus - Closed loop, with PI controller")
+grid on;
+xlim([-2e4, 1e4]);
+movegui('south');
+
+figure(9);
+bode(pi_boost_cl);
+title("Pre-Step Bode Diagram - Closed loop, with PI controller")
+grid on;
+movegui('southeast');
+
+figure(10);
+step(pi_boost_cl, 50e-3)
+title("Closed loop (PI) step response - From TF")
+grid on;
 
 %% 
 
 % Finds values starting from 0
 % 5% Settling Threshold
-startUpInfo = stepinfo(LL_boost_tf_cl, 'SettlingTimeThreshold', 0.05)
+startUpInfo = stepinfo(pi_boost_cl, 'SettlingTimeThreshold', 0.05)
 
 
 %% Manually find settling time, rise time (10-90%), settling time(5%)

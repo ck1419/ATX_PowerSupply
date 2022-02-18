@@ -41,10 +41,10 @@ StepSize = 0.05;
 % controllerZero =1/(2*pi*3e3)
 
 
-kP = 0.001;
-kI = 0.02;
+kI = 1;
+kP = 0;
+T = 0.02;
 gain = 1;
-
 
 %% Model
 
@@ -79,11 +79,11 @@ boost_ss = ss(A, E, C, F);
 % controller_ss = ss(cA, cB, cC, cD);
 % controller_tf = pid(kP,kI,0);
 
-% Boost Transfer Function
+%% Boost Transfer Function
 [boost_tf_upper, boost_tf_lower] = ss2tf(A,E,C,F);
 boost_tf = tf(boost_tf_upper, boost_tf_lower);
 
-% Lead lag controller
+%% Lead lag controller
 % LL_controller_tf = tf([1 -controllerZero], [1 -controllerPole]); % Lead lag controller
 % LL_boost_tf_ol = series(boost_tf, LL_controller_tf);
 % LL_boost_tf_cl = feedback(LL_boost_tf_ol*gain, 1);
@@ -91,12 +91,13 @@ boost_tf = tf(boost_tf_upper, boost_tf_lower);
 % LL_boost_ss_cl = feedback(LL_boost_ss_ol*gain, 1);
 
 % PI Controller
-pi_controller = pid(kP, kI, 0);
+% pi_controller = pid(kP, kI, 0);
+pi_controller = tf([0 1], [0.002 0]);
 pi_boost = series(pi_controller, boost_ss);
 pi_boost_cl = feedback(gain*pi_boost, 1);
 
-%% Unit Step Delta
 
+%% Unit Step Delta
 
 % Find unit step-response
 T = 0:0.001:StepSize;
@@ -115,6 +116,7 @@ y = [Y; y];
 %% Results
 
 % % Delta unit-step
+% figure(1);
 % subplot(3,1,1)
 % plot([0, 0.15, 0.1501, 0.2], [Delta, Delta, Delta+StepSize, Delta+StepSize])
 % ylim([Delta-0.05 Delta+0.05+StepSize]);
@@ -177,7 +179,7 @@ y = [Y; y];
 % movegui('southwest');
 
 figure(8);
-rlocus(pi_boost_cl);
+rlocus(pi_boost);
 title("Pre-Step Root Locus - Closed loop, with PI controller")
 grid on;
 xlim([-2e4, 1e4]);
