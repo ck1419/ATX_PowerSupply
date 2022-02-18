@@ -10,8 +10,8 @@ clf;
 % State-space average model of a Boost Converter
 % u=[delta]; x=[i_L; v_C]; y=[v_O]
 % Component Parameters
-L = 1.31e-3; 
-r_L = 0; 
+L = 3.14e-3; % real values 
+r_L = 3.29e-3; 
 C = 1.21e-6; 
 r_C = 0; 
 R = 247;
@@ -33,7 +33,7 @@ StepSize = 0.05;
 % controllerZero =1/(2*pi*3e3)
 
 % PI Controller
-kP = 0;
+kP = 0.0001;
 kI = 1;
 T = 0.02;
 gain = 1;
@@ -183,10 +183,10 @@ title("Pre-Step Bode Diagram - Closed loop, with PI controller")
 grid on;
 movegui('southeast');
 
-figure(10);
-step(pi_boost_cl, 50e-3)
-title("Closed loop (PI) step response - From TF")
-grid on;
+% figure(10);
+% step(pi_boost_cl, 50e-3)
+% title("Closed loop (PI) step response - From TF")
+% grid on;
 
 %% 
 
