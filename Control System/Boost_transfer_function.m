@@ -78,11 +78,11 @@ boost_ss = ss(A, E, C, F);
 % controller_ss = ss(cA, cB, cC, cD);
 % controller_tf = pid(kP,kI,0);
 
-% Boost Transfer Function
+%% Boost Transfer Function
 [boost_tf_upper, boost_tf_lower] = ss2tf(A,E,C,F);
 boost_tf = tf(boost_tf_upper, boost_tf_lower);
 
-% Lead lag controller
+%% Lead lag controller
 LL_controller_tf = tf([1 -controllerZero], [1 -controllerPole]); % Lead lag controller
 LL_boost_tf_ol = series(boost_tf, LL_controller_tf);
 LL_boost_tf_cl = feedback(LL_boost_tf_ol*gain, 1);
@@ -95,18 +95,16 @@ pi_controller = tf([0 1], [0.002 0]);
 pi_boost = series(pi_controller, boost_ss);
 pi_boost_cl = feedback(gain*pi_boost, 1);
 
-%% Unit Step Delta
 
+%% Unit Step Delta
 
 % Find unit step-response
 T = 0:0.001:StepSize;
 [y,T,x] = step(boost_ss,T);
 
-
 % Scale step-response and add to operating point
 iL = 0.05*x(:,1)+X(1)*ones(length(T),1);
 y = 0.05*y+Y*ones(length(T),1);
-
 
 % Add time prior to step
 T = [0; T+0.15];
@@ -116,48 +114,49 @@ y = [Y; y];
 
 %% Results
 
-% % Delta unit-step
-% subplot(3,1,1)
-% plot([0, 0.15, 0.1501, 0.2], [Delta, Delta, Delta+StepSize, Delta+StepSize])
-% ylim([Delta-0.05 Delta+0.05+StepSize]);
-% xlabel("Time [s]")
-% ylabel("Duty Cycle")
-% title("Delta Input")
-% grid on;
-% 
-% subplot(3,1,2)
-% plot(T,iL)
-% xlabel("Time [s]")
-% ylabel("Current [A]")
-% title("Current Output")
-% grid on;
-% 
-% subplot(3,1,3)
-% plot(T,y)
-% xlabel("Time [s]")
-% ylabel("Voltage [V]")
-% title("Voltage Output")
-% grid on;
-% movegui('northwest');
-% 
-% % Pre-step Bode Plot
-% figure(2);
-% bode(boost_tf);
-% title("Bode plot for Boost converter - Open loop, no controller");
-% grid on;
-% movegui('north');
-% 
-% figure(3);
-% rlocus(boost_tf);
-% title("Root Locus for Boost converter - Closed loop, no controller");
-% grid on;
-% movegui('northeast');
-% 
-% figure(4);
-% step(boost_tf, 10e-3)
-% title("Open loop step response - no controller")
-% grid on;
-% movegui('west');
+% Delta unit-step
+figure(1);
+subplot(3,1,1)
+plot([0, 0.15, 0.1501, 0.2], [Delta, Delta, Delta+StepSize, Delta+StepSize])
+ylim([Delta-0.05 Delta+0.05+StepSize]);
+xlabel("Time [s]")
+ylabel("Duty Cycle")
+title("Delta Input")
+grid on;
+
+subplot(3,1,2)
+plot(T,iL)
+xlabel("Time [s]")
+ylabel("Current [A]")
+title("Current Output")
+grid on;
+
+subplot(3,1,3)
+plot(T,y)
+xlabel("Time [s]")
+ylabel("Voltage [V]")
+title("Voltage Output")
+grid on;
+movegui('northwest');
+
+% Pre-step Bode Plot
+figure(2);
+bode(boost_tf);
+title("Bode plot for Boost converter - Open loop, no controller");
+grid on;
+movegui('north');
+
+figure(3);
+rlocus(boost_tf);
+title("Root Locus for Boost converter - Closed loop, no controller");
+grid on;
+movegui('northeast');
+
+figure(4);
+step(boost_tf, 10e-3)
+title("Open loop step response - no controller")
+grid on;
+movegui('west');
 
 %%%%%% Lead lag %%%%%%
 figure(5);
