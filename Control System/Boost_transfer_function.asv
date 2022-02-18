@@ -36,6 +36,11 @@ gain = 0.00083;
 % controllerZero =1/(2*pi*3e3)
 
 
+% kP = 1000;
+% kI = 10000;
+
+
+
 %% Model
 
 
@@ -80,35 +85,33 @@ LL_boost_tf_cl = feedback(LL_boost_tf_ol*gain, 1);
 LL_boost_ss_ol = series(boost_ss, LL_controller_tf);
 LL_boost_ss_cl = feedback(LL_boost_ss_ol*gain, 1);
 
-%% PI Controller from Loop Shaping: Ignore this section
-
-% tau = 0.02; % Sampling delay?
+%% PI Controller from Loop Shaping
+tau = 0.02; % Sampling delay?
 omega_d = 62832; % Bandwidth in rad/s
-mu = 358.5171; % Scaling the actual gain. Can try later.
+mu = 358.5171; % Scaling the actual gain
 
-tau_f = 0.0000001;
-tau_1 = 1/(omega_d * 0.1);
-tau_2 = 1/(omega_d * 2);
+tau_f = 0.01;
+tau_1 = 1/(omega_d * 0.1)
+tau_2 = 1/(omega_d * 2)
 
 % recover PID gains
 a=tau_1+tau_2;
 b=tau_1*tau_2;
 
-bar_mu = omega_d/tau_1;
+bar_mu = omega_d/tau_1
 
-Ki=bar_mu/mu;
-Kp=a*Ki-Ki*tau_f;
-Kd=b*Ki-Kp*tau_f;
+Ki=bar_mu/mu
+Kp=a*Ki-Ki*tau_f
+Kd=b*Ki-Kp*tau_f
 
-Rq = pid(Kp,Ki,Kd,tau_f);
+Rq = pid(Kp,Ki,Kd,tau_f)
 
 %% PID Controller from Lectures
 
 z = -60000;
 pi_controller = tf([1,-z],[1,0]);
 pi_boost = series(pi_controller, boost_ss);
-% pi_boost = series(Rq, boost_ss);
-k=0.012;
+k=0.02;
 pi_boost_cl = feedback(k*pi_boost, 1);
 
 
@@ -174,24 +177,24 @@ title("Open loop step response - no controller")
 grid on;
 movegui('west');
 
-%%%%%% Lead lag %%%%%%
-figure(5);
-rlocus(LL_boost_tf_ol);
-title("Pre-Step Root Locus - Closed loop, with lead lag controller")
-xlim([-1e5, 0.5e5]);
-grid on;
-
-figure(6);
-bode(LL_boost_tf_cl);
-title("Pre-Step Bode Diagram - Closed loop, with lead lag controller")
-grid on;
-movegui('east');
-
-figure(7);
-step(LL_boost_tf_cl, 10e-3)
-title("Closed loop (Lead Lag) step response - From TF")
-grid on;
-movegui('southwest');
+% %%%%%% Lead lag %%%%%%
+% figure(5);
+% rlocus(LL_boost_tf_ol);
+% title("Pre-Step Root Locus - Closed loop, with lead lag controller")
+% xlim([-1e5, 0.5e5]);
+% grid on;
+% 
+% figure(6);
+% bode(LL_boost_tf_cl);
+% title("Pre-Step Bode Diagram - Closed loop, with lead lag controller")
+% grid on;
+% movegui('east');
+% 
+% figure(7);
+% step(LL_boost_tf_cl, 10e-3)
+% title("Closed loop (Lead Lag) step response - From TF")
+% grid on;
+% movegui('southwest');
 
 %%%%%% PI Controller %%%%%%
 figure(8);
@@ -207,7 +210,7 @@ grid on;
 movegui('southeast');
 
 figure(10);
-step(pi_boost_cl, 10e-3)
+step(pi_boost_cl, 100e-3)
 title("Closed loop (PI) step response - From TF")
 grid on;
 
