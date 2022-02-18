@@ -26,17 +26,19 @@ StepSize = 0.05;
 
 
 % Controller
-% controllerZero = -5000;
-% controllerPole = -50000;
+factor = 2.65;
+controllerZero = 8e3;
+controllerPole = -controllerZero*factor;
+gain = 0.00083;
 
 % Same lead lag controller as Buck Example
-controllerPole =1/(2*pi*1e4)
-controllerZero=1/(2*pi*3e3)
+% controllerPole =1/(2*pi*1e4)
+% controllerZero =1/(2*pi*3e3)
 
 
 % kP = 1000;
 % kI = 10000;
-gain = 7.7;
+
 
 
 %% Model
@@ -111,53 +113,54 @@ y = [Y; y];
 
 %% Results
 
-% Delta unit-step
-subplot(3,1,1)
-plot([0, 0.15, 0.1501, 0.2], [Delta, Delta, Delta+StepSize, Delta+StepSize])
-ylim([Delta-0.05 Delta+0.05+StepSize]);
-xlabel("Time [s]")
-ylabel("Duty Cycle")
-title("Delta Input")
-grid on;
-
-subplot(3,1,2)
-plot(T,iL)
-xlabel("Time [s]")
-ylabel("Current [A]")
-title("Current Output")
-grid on;
-
-subplot(3,1,3)
-plot(T,y)
-xlabel("Time [s]")
-ylabel("Voltage [V]")
-title("Voltage Output")
-grid on;
-movegui('northwest');
-
-% Pre-step Bode Plot
-figure(2);
-bode(boost_tf);
-title("Bode plot for Boost converter - Open loop, no controller");
-grid on;
-movegui('north');
-
-figure(3);
-rlocus(boost_tf*0.25);
-title("Root Locus for Boost converter - Closed loop, no controller");
-grid on;
-movegui('northeast');
-
-figure(4);
-step(boost_tf, 10e-3)
-title("Open loop step response - no controller")
-grid on;
-movegui('west');
+% % Delta unit-step
+% subplot(3,1,1)
+% plot([0, 0.15, 0.1501, 0.2], [Delta, Delta, Delta+StepSize, Delta+StepSize])
+% ylim([Delta-0.05 Delta+0.05+StepSize]);
+% xlabel("Time [s]")
+% ylabel("Duty Cycle")
+% title("Delta Input")
+% grid on;
+% 
+% subplot(3,1,2)
+% plot(T,iL)
+% xlabel("Time [s]")
+% ylabel("Current [A]")
+% title("Current Output")
+% grid on;
+% 
+% subplot(3,1,3)
+% plot(T,y)
+% xlabel("Time [s]")
+% ylabel("Voltage [V]")
+% title("Voltage Output")
+% grid on;
+% movegui('northwest');
+% 
+% % Pre-step Bode Plot
+% figure(2);
+% bode(boost_tf);
+% title("Bode plot for Boost converter - Open loop, no controller");
+% grid on;
+% movegui('north');
+% 
+% figure(3);
+% rlocus(boost_tf);
+% title("Root Locus for Boost converter - Closed loop, no controller");
+% grid on;
+% movegui('northeast');
+% 
+% figure(4);
+% step(boost_tf, 10e-3)
+% title("Open loop step response - no controller")
+% grid on;
+% movegui('west');
 
 %%%%%% Lead lag %%%%%%
 figure(5);
 rlocus(LL_boost_tf_ol);
 title("Pre-Step Root Locus - Closed loop, with lead lag controller")
+xlim([-1e5, 0.5e5]);
 grid on;
 
 figure(6);
@@ -172,22 +175,22 @@ title("Closed loop (Lead Lag) step response - From TF")
 grid on;
 movegui('southwest');
 
-figure(8);
-rlocus(pi_boost_cl, 2e-3);
-title("Pre-Step Root Locus - Closed loop, with PI controller")
-grid on;
-movegui('south');
+% figure(8);
+% rlocus(pi_boost_cl, 2e-3);
+% title("Pre-Step Root Locus - Closed loop, with PI controller")
+% grid on;
+% movegui('south');
 
-figure(9);
-bode(pi_boost_cl);
-title("Pre-Step Bode Diagram - Closed loop, with PI controller")
-grid on;
-movegui('southeast');
+% figure(9);
+% bode(pi_boost_cl);
+% title("Pre-Step Bode Diagram - Closed loop, with PI controller")
+% grid on;
+% movegui('southeast');
 
-figure(10);
-step(pi_boost_cl, 10e-3)
-title("Closed loop (PI) step response - From TF")
-grid on;
+% figure(10);
+% step(pi_boost_cl, 10e-3)
+% title("Closed loop (PI) step response - From TF")
+% grid on;
 
 %% 
 
