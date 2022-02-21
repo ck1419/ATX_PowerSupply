@@ -2,13 +2,9 @@ clear;
 close all;
 clc;
 
-%% Instructions
-
-% 1. Define controller parameters in Lead lag controller, PI Controller, Integral Controller sections
-% 2. Choose controller type in CHOOSE CONTROLLER TYPE HERE
-
 
 %% Circuit Parameters
+
 
 % State-space average model of a Boost Converter
 % u=[delta]; x=[i_L; v_C]; y=[v_O]
@@ -29,6 +25,7 @@ StepSize = 0.05;
 
 %% Model
 
+
 % First form models of the two states
 A_on = [-r_L/L, 0; 0, -1/C/(R+r_C)];
 B_on = [1/L; 0];
@@ -36,6 +33,7 @@ C_on = [0, R/(R+r_C)];
 A_off = [-r_L/L-r_C*R/L/(R+r_C), -R/L/(R+r_C); R/C/(R+r_C), -1/C/(R+r_C)];
 B_off = [1/L; 0];
 C_off = [r_C*R/(R+r_C), R/(R+r_C)];
+
 
 % Average the two models
 % Operating point model
@@ -51,7 +49,6 @@ E = (A_on-A_off)*X + (B_on-B_off)*U;
 F = (C_on-C_off)*X;
 
 boost_ss = ss(A, E, C, F);
-
 
 %% Boost Transfer Function
 [boost_tf_upper, boost_tf_lower] = ss2tf(A,E,C,F);
@@ -78,15 +75,15 @@ pi_controller = pid(kP, kI, 0);
 %% Integral Controller
 % Why is it damping so much despite the fact that
 
-kI = 0.02;
-i_gain = 1.61;
+ictrl_kI = 0.02;
+ictrl_gain = 1.61;
 
 % Integral Controller
-i_controller = tf([kI], [1 0]);
+i_controller = tf([ictrl_kI], [1 0]);
 
 %% CHOOSE CONTROLLER TYPE HERE
 
-type = 'PI'; % Available options: LL, PI, Int
+type = 'LL'; % Available options: LL, PI, Int
 
 gain = ll_gain;
 controller = tf([1 -controllerZero], [1 -controllerPole]);
@@ -98,13 +95,14 @@ switch type
     case 'PI'
         gain = pi_gain;
         controller = pi_controller;
-    case 'INT'
-        gain = i_gain;
+    case 'Int'
+        gain = ictrl_gain;
         controller = i_controller;
 end
 
-boost_OL = series(boost_tf, controller);
-boost_CL = feedback(boost_OL*gain, 1);
+controller_OL = series(boost_tf, controller);
+controller_CL = feedback(controller_OL*gain, 1);
+
 
 
 %% Unit Step Delta
@@ -171,29 +169,66 @@ y = [Y; y];
 
 %% Results: With Controller
 
-figure(5);
-rlocus(boost_OL);
-title(strcat("Pre-Step Root Locus - Closed loop, controller type: ",type))
+% figure(5);
+% rlocus(LL_boost_tf_ol);
+% title("Pre-Step Root Locus - Closed loop, with lead lag controller")
+% grid on;
+% 
+% figure(6);
+% bode(LL_boost_tf_cl);
+% title("Pre-Step Bode Diagram - Closed loop, with lead lag controller")
+% grid on;
+% movegui('east');
+% 
+% figure(7);
+% step(LL_boost_tf_cl, 10e-3)
+% title("Closed loop (Lead Lag) step response - From TF")
+% grid on;
+% movegui('southwest');
+
+% figure(8);
+rlocus(i_boost);
+title("Pre-Step Root Locus - Closed loop, with PI controller")
+grid on;
+xlim([-2e4, 1e4]);
+movegui('south');
+
+figure(9);
+bode(i_boost_cl);
+title("Pre-Step Bode Diagram - Closed loop, with PI controller")
+grid on;
+movegui('southeast');
+
+figure(10);
+step(i_boost_cl, 500e-3)
+title("Closed loop (PI) step response - From TF")
 grid on;
 
-figure(6);
-bode(boost_CL);
-title(strcat("Pre-Step Bode Diagram - Closed loop, controller type: ",type))
-grid on;
-movegui('east');
+% figure(11);
+% rlocus(pi_boost);
+% title("Pre-Step Root Locus - Closed loop, with Integral controller")
+% grid on;
+% xlim([-2e4, 1e4]);
+% movegui('south');
+% 
+% figure(12);
+% bode(pi_boost_cl);
+% title("Pre-Step Bode Diagram - Closed loop, with Integral controller")
+% grid on;
+% movegui('southeast');
+% 
+% figure(13);
+% step(pi_boost_cl, 50e-3)
+% title("Closed loop (Integral) step response - From TF")
+% grid on;
 
-figure(7);
-step(boost_CL, 10e-3)
-title(strcat("Step response - Closed loop, controller type: ", type));
-grid on;
-movegui('southwest');
 
 %% 
 
 % Finds values starting from 0
 % 5% Settling Threshold
-startUpInfo = stepinfo(boost_CL, 'SettlingTimeThreshold', 0.05)
-damp(boost_CL)
+startUpInfo = stepinfo(i_boost_cl, 'SettlingTimeThreshold', 0.05)
+damp(i_boost_cl)
 
 %% Manually find settling time, rise time (10-90%), settling time(5%)
 
