@@ -1,7 +1,6 @@
 clear;
 close all;
 clc;
-clf;
 
 
 %% Circuit Parameters
@@ -37,6 +36,10 @@ kP = 0.0001;
 kI = 1;
 T = 0.02;
 gain = 1;
+
+% I Controller
+ictrl_kI = 0.02;
+ictrl_gain = 1;
 
 %% Model
 
@@ -84,10 +87,14 @@ boost_tf = tf(boost_tf_upper, boost_tf_lower);
 
 % PI Controller
 % pi_controller = pid(kP, kI, 0);
-pi_controller = tf([(kI*T) kP], [T 0]);
-pi_boost = series(pi_controller, boost_ss);
-pi_boost_cl = feedback(gain*pi_boost, 1);
+% pi_controller = tf([(kI*T) kP], [T 0]);
+% pi_boost = series(pi_controller, boost_ss);
+% pi_boost_cl = feedback(gain*pi_boost, 1);
 
+%% Integral Controller
+i_controller = tf([ictrl_kI], [1 0]);
+i_boost = series(i_controller, boost_ss);
+i_boost_cl = feedback(ictrl_gain*i_boost, 1);
 
 %% Unit Step Delta
 
@@ -170,23 +177,41 @@ y = [Y; y];
 % grid on;
 % movegui('southwest');
 
-figure(8);
-rlocus(pi_boost);
-title("Pre-Step Root Locus - Closed loop, with PI controller")
-grid on;
-xlim([-2e4, 1e4]);
-movegui('south');
-
-figure(9);
-bode(pi_boost_cl);
-title("Pre-Step Bode Diagram - Closed loop, with PI controller")
-grid on;
-movegui('southeast');
+% figure(8);
+% rlocus(pi_boost);
+% title("Pre-Step Root Locus - Closed loop, with PI controller")
+% grid on;
+% xlim([-2e4, 1e4]);
+% movegui('south');
+% 
+% figure(9);
+% bode(pi_boost_cl);
+% title("Pre-Step Bode Diagram - Closed loop, with PI controller")
+% grid on;
+% movegui('southeast');
 
 % figure(10);
 % step(pi_boost_cl, 50e-3)
 % title("Closed loop (PI) step response - From TF")
 % grid on;
+
+figure(11);
+rlocus(i_boost);
+title("Pre-Step Root Locus - Closed loop, with Integral controller")
+grid on;
+xlim([-2e4, 1e4]);
+movegui('south');
+
+figure(12);
+bode(i_boost_cl);
+title("Pre-Step Bode Diagram - Closed loop, with Integral controller")
+grid on;
+movegui('southeast');
+
+figure(13);
+step(i_boost_cl, 500e-3)
+title("Closed loop (I controller) step response - From TF")
+grid on;
 
 %% 
 
