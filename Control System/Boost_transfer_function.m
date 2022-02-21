@@ -1,7 +1,6 @@
 clear;
 close all;
 clc;
-clf;
 
 
 %% Circuit Parameters
@@ -10,8 +9,8 @@ clf;
 % State-space average model of a Boost Converter
 % u=[delta]; x=[i_L; v_C]; y=[v_O]
 % Component Parameters
-L = 1.31e-3; 
-r_L = 0; 
+L = 3.14e-3; % real values 
+r_L = 3.29e-3; 
 C = 1.21e-6; 
 r_C = 0; 
 R = 247;
@@ -41,6 +40,10 @@ controllerPole = -controllerZero*factor;
 kP = 0.000152;
 kI = 0.85533;
 gain = 1;
+
+% I Controller
+ictrl_kI = 0.02;
+ictrl_gain = 1;
 
 %% Model
 
@@ -166,15 +169,33 @@ y = [Y; y];
 % grid on;
 % movegui('southwest');
 
-figure(8);
-rlocus(pi_boost);
-title("Pre-Step Root Locus - Closed loop, with PI controller")
+% figure(8);
+% rlocus(pi_boost);
+% title("Pre-Step Root Locus - Closed loop, with PI controller")
+% grid on;
+% xlim([-2e4, 1e4]);
+% movegui('south');
+% 
+% figure(9);
+% bode(pi_boost_cl);
+% title("Pre-Step Bode Diagram - Closed loop, with PI controller")
+% grid on;
+% movegui('southeast');
+
+% figure(10);
+% step(pi_boost_cl, 50e-3)
+% title("Closed loop (PI) step response - From TF")
+% grid on;
+
+figure(11);
+rlocus(i_boost);
+title("Pre-Step Root Locus - Closed loop, with Integral controller")
 grid on;
 movegui('south');
 
-figure(9);
-bode(pi_boost_cl);
-title("Pre-Step Bode Diagram - Closed loop, with PI controller")
+figure(12);
+bode(i_boost_cl);
+title("Pre-Step Bode Diagram - Closed loop, with Integral controller")
 grid on;
 movegui('southeast');
 
