@@ -37,14 +37,9 @@ controllerPole = -controllerZero*factor;
 % controllerZero =1/(2*pi*3e3)
 
 % PI Controller
-kP = 0.000152;
-kI = 0.85533;
+kP = 300e-6;
+kI = 0.6;
 gain = 1;
-
-% I Controller
-ictrl_kI = 0.02;
-ictrl_gain = 1;
-
 %% Model
 
 
@@ -169,38 +164,21 @@ y = [Y; y];
 % grid on;
 % movegui('southwest');
 
-% figure(8);
-% rlocus(pi_boost);
-% title("Pre-Step Root Locus - Closed loop, with PI controller")
-% grid on;
-% xlim([-2e4, 1e4]);
-% movegui('south');
-% 
-% figure(9);
-% bode(pi_boost_cl);
-% title("Pre-Step Bode Diagram - Closed loop, with PI controller")
-% grid on;
-% movegui('southeast');
-
-% figure(10);
-% step(pi_boost_cl, 50e-3)
-% title("Closed loop (PI) step response - From TF")
-% grid on;
-
-figure(11);
-rlocus(i_boost);
-title("Pre-Step Root Locus - Closed loop, with Integral controller")
+figure(8);
+rlocus(pi_boost);
+title("Pre-Step Root Locus - Closed loop, with PI controller")
 grid on;
+xlim([-2e4, 1e4]);
 movegui('south');
 
-figure(12);
-bode(i_boost_cl);
-title("Pre-Step Bode Diagram - Closed loop, with Integral controller")
+figure(9);
+bode(pi_boost_cl);
+title("Pre-Step Bode Diagram - Closed loop, with PI controller")
 grid on;
 movegui('southeast');
 
 figure(10);
-step(pi_boost_cl, 100e-3)
+step(pi_boost_cl, 50e-3)
 title("Closed loop (PI) step response - From TF")
 grid on;
 
@@ -209,7 +187,7 @@ grid on;
 % Finds values starting from 0
 % 5% Settling Threshold
 startUpInfo = stepinfo(pi_boost_cl, 'SettlingTimeThreshold', 0.05)
-
+damp(pi_boost_cl)
 
 %% Manually find settling time, rise time (10-90%), settling time(5%)
 
