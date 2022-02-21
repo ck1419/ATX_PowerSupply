@@ -23,19 +23,23 @@ Delta = 0.75;
 % Modeling Conditions
 StepSize = 0.05;
 
-% factor = 2.65;
-% controllerZero = 8e3;
-% controllerPole = -controllerZero*factor;
-% gain = 0.00083;
+% factor = 20;
+% controllerZero = -1e3;
+% controllerPole = controllerZero*factor;
+% gain = 0.13;
+
+factor = 2.65;
+controllerZero = 8e3;
+controllerPole = -controllerZero*factor;
+% gain = 1;
 
 % Same lead lag controller as Buck Example
 % controllerPole =1/(2*pi*1e4)
 % controllerZero =1/(2*pi*3e3)
 
 % PI Controller
-kP = 0;
-kI = 1;
-T = 0.02;
+kP = 0.000152;
+kI = 0.85533;
 gain = 1;
 
 %% Model
@@ -64,30 +68,22 @@ E = (A_on-A_off)*X + (B_on-B_off)*U;
 F = (C_on-C_off)*X;
 
 boost_ss = ss(A, E, C, F);
-% boost_ss = ss(A,B,C,0);
-
-% Control System
-% [cA, cB, cC, cD] = tf2ss([1 -controllerZero], [1 -controllerPole]);
-% controller_ss = ss(cA, cB, cC, cD);
-% controller_tf = pid(kP,kI,0);
 
 %% Boost Transfer Function
 [boost_tf_upper, boost_tf_lower] = ss2tf(A,E,C,F);
 boost_tf = tf(boost_tf_upper, boost_tf_lower);
 
 %% Lead lag controller
-% LL_controller_tf = tf([1 -controllerZero], [1 -controllerPole]); % Lead lag controller
-% LL_boost_tf_ol = series(boost_tf, LL_controller_tf);
-% LL_boost_tf_cl = feedback(LL_boost_tf_ol*gain, 1);
-% LL_boost_ss_ol = series(boost_ss, LL_controller_tf);
-% LL_boost_ss_cl = feedback(LL_boost_ss_ol*gain, 1);
+LL_controller_tf = tf([1 -controllerZero], [1 -controllerPole]); % Lead lag controller
+LL_boost_tf_ol = series(boost_tf, LL_controller_tf);
+LL_boost_tf_cl = feedback(LL_boost_tf_ol*gain, 1);
+LL_boost_ss_ol = series(boost_ss, LL_controller_tf);
+LL_boost_ss_cl = feedback(LL_boost_ss_ol*gain, 1);
 
 % PI Controller
-% pi_controller = pid(kP, kI, 0);
-pi_controller = tf([(kI*T) kP], [T 0]);
+pi_controller = pid(kP, kI, 0);
 pi_boost = series(pi_controller, boost_ss);
 pi_boost_cl = feedback(gain*pi_boost, 1);
-
 
 %% Unit Step Delta
 
@@ -155,7 +151,7 @@ y = [Y; y];
 % figure(5);
 % rlocus(LL_boost_tf_ol);
 % title("Pre-Step Root Locus - Closed loop, with lead lag controller")
-% xlim([-1e5, 0.5e5]);
+% % xlim([-1e5, 0.5e5]);
 % grid on;
 % 
 % figure(6);
@@ -174,7 +170,6 @@ figure(8);
 rlocus(pi_boost);
 title("Pre-Step Root Locus - Closed loop, with PI controller")
 grid on;
-xlim([-2e4, 1e4]);
 movegui('south');
 
 figure(9);
@@ -184,7 +179,7 @@ grid on;
 movegui('southeast');
 
 figure(10);
-step(pi_boost_cl, 50e-3)
+step(pi_boost_cl, 100e-3)
 title("Closed loop (PI) step response - From TF")
 grid on;
 
