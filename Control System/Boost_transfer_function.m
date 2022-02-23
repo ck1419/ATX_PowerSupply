@@ -183,7 +183,7 @@ grid on;
 movegui('east');
 
 figure(7);
-step(boost_CL, 10e-3)
+step(boost_CL, 500e-3)
 title(strcat("Step response - Closed loop, controller type: ", type));
 grid on;
 movegui('southwest');
