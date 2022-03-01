@@ -150,24 +150,24 @@ y = [Y; y];
 % grid on;
 % movegui('northwest');
 % 
-% % Pre-step Bode Plot
-% figure(2);
-% bode(boost_tf);
-% title("Bode plot for Boost converter - Open loop, no controller");
-% grid on;
-% movegui('north');
-% 
-% figure(3);
-% rlocus(boost_tf);
-% title("Root Locus for Boost converter - Closed loop, no controller");
-% grid on;
-% movegui('northeast');
-% 
-% figure(4);
-% step(boost_tf, 10e-3)
-% title("Open loop step response - no controller")
-% grid on;
-% movegui('west');
+% Pre-step Bode Plot
+figure(2);
+bode(boost_tf);
+title("Bode plot for Boost converter - Open loop, no controller");
+grid on;
+movegui('north');
+
+figure(3);
+rlocus(boost_tf);
+title("Root Locus for Boost converter - Closed loop, no controller");
+grid on;
+movegui('northeast');
+
+figure(4);
+step(boost_tf, 10e-3)
+title("Open loop step response - no controller")
+grid on;
+movegui('west');
 
 %% Results: With Controller
 
