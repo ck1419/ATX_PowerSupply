@@ -9,14 +9,16 @@ This workbook contains:
 3. (Ideal Boost) Startup behaviour
 4. Component selection summary
 5. `Task6_Cores`: Inductor core selection, following the specifications in [Magnetic Poder Core Catalog](5_0_Choosing_Real_Components\Magnetics-Powder-Core-Catalog-2020.pdf), and using the [curve fitting tool](5_0_Choosing_Real_Components\Magnetics-Curve-Fit-Equation-Tool-2020.xlsx)
-6. Abandoned: `Task5_Inductor_Core` and `Task5_Inductors`
+6. Abandoned: `Task5_Inductor_Core` and `Task5_Inductors`: Used Magnetics' guide instead.
 7. List of component selections for capacitor, diode and MOSFET. Data exported from Digikeys.
 
-## [MATLAB Tests > Section4](MATLAB%20Tests/Section4.m) - For task 4
+## Task 4: Ideal Boost
+
+### MATLAB script for choosing components: [Ideal_Boost_Components.m](4_2_Ideal_Boost_SPICE/Ideal_Boost_Components.m)
 
 Simple MATLAB script to generate the ideal inductance and capacitance value with the given specifications (power throughput, ripple, efficiency, operating frequency etc.)
 
-## [Ideal Boost SMPS](Ideal%20Boost%20SMPS/Boost%20SMPS.asc) - For tasks 4
+### SPICE Simulation: [Ideal Boost SMPS](4_2_Ideal_Boost_SPICE/Boost%20SMPS.asc)
 
 A SPICE circuit which models an ideal boost SMPS to meet the required power and ripple specifications. The measurements obtained are:
 
@@ -26,29 +28,50 @@ A SPICE circuit which models an ideal boost SMPS to meet the required power and 
 4. Finding settling time, rise time
 5. Power input, output, efficiency
 
-## Component Datasheets - for task 5,6
+## Task 5, 6: Boost with real components
+
+### Choosing real components: [5_0_Choosing_Real_Components](5_0_Choosing_Real_Components/)
 
 PDF datasheets for our selected capacitor, diode, MOSFET and inductor. What values do we need to extract from them to create the relevant models on SPICE?
 
-## [Magnetics-Curve-Fit-Equation-Tool-2020](Magnetics-Curve-Fit-Equation-Tool-2020.xlsx) - For task 5
+### Choosing inductor core: [Magnetics-Curve-Fit-Equation-Tool-2020](5_0_Choosing_Real_Components/Magnetics-Curve-Fit-Equation-Tool-2020.xlsx)
 
-Used in conjunction with the "Magnetics Powder Core" manual to determine and optimise the inductor core size, required windings and more.
+Used in conjunction with the [Magnetics Powder Core manual](5_0_Choosing_Real_Components/Magnetics-Powder-Core-Catalog-2020.pdf) to determine and optimise the inductor core size, required windings and parameters such as resistance.
 
-## [Real Boost SMPS](Real%20Boost%20SMPS/Boost%20SMPS.asc) - For task 6,7
+### SPICE simulation with real components: [Boost_SMPS](6_1_Real_Boost_SPICE/Boost%20SMPS.asc)
 
 Similar to Ideal Boost SMPS, except we use real component values and attempt to implement the control signal. PID controller does not seem to work.
 
-## [Control System (MATLAB)](Control%20System/Boost_transfer_function.m) - For task 7
+## Task 7: CL control for Boost
+
+### MATLAB control design: [Boost_transfer_function](7_2_CL_Boost_MATLAB/Boost_transfer_function.m)
 
 1. Obtain state space model of Boost converter in ON and OFF state.
 2. State space averaging
 3. Transfer function for open loop state space model
 4. Root locus of closed loop system, with only a proportional controller
 
-> What is the unit step response thing doing?
+### SPICE simulations for CL Boost
+
+Stored in [6_1_Real_Boost_SPICE](6_1_Real_Boost_SPICE/): no work commenced yet
+
+
+## Task 8: Flyback
+
+### Choosing components: [flyback_components.m](8_2_Flyback_MATLAB/flyback_components.m)
+
+Choosing the primary inductor coil, secondary inductor coils, ripple capacitor and load resistor.
+
+### SPICE Simulation (no controller): [BasicFlyBack_AllRails.asc](8_1_Flyback_SPICE\BasicFlyBack_AllRails.asc)
+
+Simulating flyback. Idle rail (5V, 2A, 10W) is not included. 90% efficiency so input power is 637/0.9 $\approx$ 707W.
+
+### MATLAB Controller design [flyback_ss.m](8_2_Flyback_MATLAB/flyback_ss.m)
+
+No luck. Somehow the initial design is not stabilisable.
 
 ## README.md
 
 Our lab notebook. Only edit on hackmd.io
 
-> Main task: Use 50kHz instead of 100kHz?
+> Main task: Use 50kHz instead of 100kHz? Or should we choose the operating frequency based on the losses? Like model the losses as a function of frequency (MOSFET conduction, switching losses)
