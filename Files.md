@@ -1,6 +1,6 @@
 # Repository File Descriptions
 
-## [ATXOutputVoltageRailSpecifications](ATXOutputVoltageRailSpecifications.xlsx) - An all encompassing workbook
+## [Coursework Excel CW_Workbook](CW_Workbook.xlsx) - An all encompassing workbook
 
 This workbook contains:
 
@@ -8,7 +8,7 @@ This workbook contains:
 2. (Ideal Boost) Efficiency at various loads
 3. (Ideal Boost) Startup behaviour
 4. Component selection summary
-5. `Task6_Cores`: Inductor core selection, following the specifications in [Magnetic Poder Core Catalog](Magnetics-Powder-Core-Catalog-2020.pdf), and using the [curve fitting tool](Magnetics-Curve-Fit-Equation-Tool-2020.xlsx)
+5. `Task6_Cores`: Inductor core selection, following the specifications in [Magnetic Poder Core Catalog](5_0_Choosing_Real_Components\Magnetics-Powder-Core-Catalog-2020.pdf), and using the [curve fitting tool](5_0_Choosing_Real_Components\Magnetics-Curve-Fit-Equation-Tool-2020.xlsx)
 6. Abandoned: `Task5_Inductor_Core` and `Task5_Inductors`
 7. List of component selections for capacitor, diode and MOSFET. Data exported from Digikeys.
 

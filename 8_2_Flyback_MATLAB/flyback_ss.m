@@ -1,30 +1,30 @@
 close all; clc; clf; clear all;
 
-syms L_eq1;
-syms r_eq1;
-syms r_m1;
-syms L_m1;
-syms L_1;
-syms L_eq2;
-syms r_eq2;
-syms C;
-syms r_c;
-syms R;
-syms k_N;
-
-syms big_d;
-syms small_d;
+% syms L_eq1;
+% syms r_eq1;
+% syms r_m1;
+% syms L_m1;
+% syms L_1;
+% syms L_eq2;
+% syms r_eq2;
+% syms C;
+% syms r_c;
+% syms R;
+% syms k_N;
+% 
+% syms big_d;
+% syms small_d;
 
 %% Example: Designing a 400V to 12V flyback converter
 
-ripple_ratio = 1/2;
+ripple_ratio = 1/2; % delta i_L/I_L
 V_in = 400;
 V_out = 3.3;
 Delta = 0.5;
-P_in = 710;
+P_in = 708; %637W / 0.9
 f_sw = 100e3;
 I_out = 34;
-delta_vout = 50e-3;
+ripple_vout = 50e-3;
 
 % Choose R to ensure it draws power as the entire device
 % R = P/V^2 = 637.7/3.3^2
@@ -38,7 +38,7 @@ L_1   = (V_in * Delta)^2/(ripple_ratio*P_in*f_sw);
 L_m1  = L_1;
 L_eq2 = 0;
 r_eq2 = 0;
-C     = (Delta * I_out)/(f_sw*delta_vout);
+C     = (Delta * I_out)/(f_sw*ripple_vout);
 r_c   = 0;
 R     = R_load;
 k_N   = V_out/V_in;
@@ -51,18 +51,19 @@ StepSize = 0.05;
 
 L_2 = k_N^2 * L_1;
 
+% On state
 A_on = [-2*(L_eq1+r_eq1)/L_1, 0;
         0, -1/(C*(R+r_c))];
 B_on = [1/L_1; 0];
 C_on = [0, R/(R+r_c)];
 
-% Non transformed
+% Off state: Non transformed (iL2, VL)
 A_off = [1/L_2*(-R*r_c/(R+r_c)-L_eq2- r_eq2), - R/(L_2*(R+r_c));
         R/(C*(R+r_c)), -1/(C*(R+r_c))];
 B_off = [0;0];
 C_off = [R*r_c/(R+r_c), R/(R+r_c)];
 
-% Transform to variables i_L1, v_c
+% Off state: Transformed (iL1, VL)
 Transform = [1/k_N 0; 0 1];
 A_off_T = Transform * A_off * inv(Transform);
 B_off_T = Transform * B_off;
@@ -85,48 +86,54 @@ F = (C_on-C_off)*X;
 
 fb_ss = ss(A, E, C, F);
 
+%% Transfer Function
+[fb_tf_upper, fb_tf_lower] = ss2tf(A,E,C,F);
+boost_tf = tf(fb_tf_upper, fb_tf_lower)
+
 %% Unit Step Delta
 
-% % Find unit step-response
-% T = 0:0.001:StepSize;
-% [y,T,x] = step(fb_ss,T);
-% 
-% % Scale step-response and add to operating point
-% iL = 0.05*x(:,1)+X(1)*ones(length(T),1);
-% y = 0.05*y+Y*ones(length(T),1);
-% 
-% % Add time prior to step
-% T = [0; T+0.15];
-% iL = [X(1); iL];
-% y = [Y; y];
-% 
-% 
-% %% Open Loop Results
-% 
-% % Delta unit-step
-% figure(1);
-% subplot(3,1,1)
-% plot([0, 0.15, 0.1501, 0.2], [Delta, Delta, Delta+StepSize, Delta+StepSize])
-% ylim([Delta-0.05 Delta+0.05+StepSize]);
-% xlabel("Time [s]")
-% ylabel("Duty Cycle")
-% title("Delta Input")
-% grid on;
-% 
-% subplot(3,1,2)
-% plot(T,iL)
-% xlabel("Time [s]")
-% ylabel("Current [A]")
-% title("Current Output")
-% grid on;
-% 
-% subplot(3,1,3)
-% plot(T,y)
-% xlabel("Time [s]")
-% ylabel("Voltage [V]")
-% title("Voltage Output")
-% grid on;
-% movegui('northwest');
+% Find unit step-response
+T = 0:0.001:StepSize;
+[y,T,x] = step(fb_ss,T);
+
+% Scale step-response and add to operating point
+iL = 0.05*x(:,1)+X(1)*ones(length(T),1);
+y = 0.05*y+Y*ones(length(T),1);
+
+% Add time prior to step
+T = [0; T+0.15];
+iL = [X(1); iL];
+y = [Y; y];
+
+
+%% Open Loop Results
+
+% Delta unit-step
+figure(1);
+subplot(3,1,1)
+plot([0, 0.15, 0.1501, 0.2], [Delta, Delta, Delta+StepSize, Delta+StepSize])
+ylim([Delta-0.05 Delta+0.05+StepSize]);
+xlabel("Time [s]")
+ylabel("Duty Cycle")
+title("Delta Input")
+grid on;
+
+subplot(3,1,2)
+plot(T,iL)
+xlabel("Time [s]")
+ylabel("Current [A]")
+title("Current Output")
+grid on;
+
+subplot(3,1,3)
+plot(T,y)
+xlabel("Time [s]")
+ylabel("Voltage [V]")
+title("Voltage Output")
+grid on;
+movegui('northwest');
+
+%%
 
 % Pre-step Bode Plot
 figure(2);
@@ -168,7 +175,7 @@ pi_controller = pid(kP, kI, 0);
 %% Integral Controller
 % Why is it damping so much despite the fact that
 
-kI = 0.0000002;
+kI = 0.0000001;
 i_gain = 3.11e7;
 
 % Integral Controller
