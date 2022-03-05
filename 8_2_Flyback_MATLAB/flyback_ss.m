@@ -81,8 +81,8 @@ X = -inv(A)*B*U;
 Y = C*X;
 
 %Small-signal model
-E = (A_on-A_off)*X + (B_on-B_off)*U;
-F = (C_on-C_off)*X;
+E = (A_on-A_off)*X + (B_on-B_off_T)*U;
+F = (C_on-C_off_T)*X;
 
 fb_ss = ss(A, E, C, F);
 
