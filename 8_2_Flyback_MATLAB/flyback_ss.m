@@ -1,4 +1,4 @@
-close all; clc; clf; clear all;
+clc; clf; clear all; close all; 
 
 % syms L_eq1;
 % syms r_eq1;
@@ -52,7 +52,7 @@ StepSize = 0.05;
 L_2 = k_N^2 * L_1;
 
 % On state
-A_on = [-2*(L_eq1+r_eq1)/L_1, 0;
+A_on = [-(L_eq1+r_eq1)/L_1, 0; %fixed
         0, -1/(C*(R+r_c))];
 B_on = [1/L_1; 0];
 C_on = [0, R/(R+r_c)];
