@@ -28,18 +28,18 @@ ripple_vout = 50e-3;
 
 % Choose R to ensure it draws power as the entire device
 % R = P/V^2 = 637.7/3.3^2
-R_load = 58.5583;
-% R_load = 97.1e-3;
+% R_load = 58.5583;
+R_load = 97.1e-3;
 
 L_eq1 = 0;
-r_eq1 = 0;
+r_eq1 = 1e-3;
 r_m1  = 0;
 L_1   = (V_in * Delta)^2/(ripple_ratio*P_in*f_sw);
 L_m1  = L_1;
 L_eq2 = 0;
-r_eq2 = 0;
+r_eq2 = 1e-3;
 C     = (Delta * I_out)/(f_sw*ripple_vout);
-r_c   = 0;
+r_c   = 25e-3; % Testing
 R     = R_load;
 k_N   = V_out/V_in;
 big_d = Delta;
@@ -166,8 +166,8 @@ LL_controller = tf([1 -controllerZero], [1 -controllerPole]); % Lead lag control
 
 %% PI Controller
 
-kP = 300e-6; % Should be in the milli to 10k range?
-kI = 0.6; % Should be in the 10's micro range?
+kP = -741;
+kI = -7.179e6; % Should be in the 10's micro range?
 pi_gain = 1;
 
 pi_controller = pid(kP, kI, 0);
@@ -183,7 +183,7 @@ i_controller = tf([kI], [1 0]);
 
 %% CHOOSE CONTROLLER TYPE HERE
 
-type = 'Int'; % Available options: LL, PI, Int
+type = 'PI'; % Available options: LL, PI, Int
 
 gain = ll_gain;
 controller = tf([1 -controllerZero], [1 -controllerPole]);
