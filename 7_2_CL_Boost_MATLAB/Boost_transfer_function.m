@@ -17,7 +17,7 @@ L = 3.14e-3; % real values
 r_L = 3.29e-3; 
 C = 1.21e-6; 
 r_C = 0.528; 
-R = 247;
+R = 500;
 
 % Circuit Conditions
 V_I = 100; 
