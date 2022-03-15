@@ -12,6 +12,7 @@ rise = [0.00022903	0.00021978	0.000210626	0.000210171	0.000209275	0.0002003];
 pout = [657.288	598.276	537.992	476.257	413.032	348.222];
 pin = [-707.191	-640.803	-573.801	-506.014	-437.426	-367.97];
 eff = [0.930175	0.934483	0.93859	0.942407	0.945777	0.948422];
+load_ratio = pin/750;
 
 overshoot = (Vout_max-Vout_avg)./Vout_avg;
 damping = log(overshoot)./sqrt(pi^2+1);
@@ -70,6 +71,7 @@ set(gca,'LineWidth',2);
 filename = ['ideal_boost_overshoot_varyLoad.jpg'];
 saveas(gcf,filename)
 
+%%
 figure(6);
 plot(Load, omega, 'kx-', 'LineWidth',2);
 ylabel('Oscillation Frequency (Hz)');
