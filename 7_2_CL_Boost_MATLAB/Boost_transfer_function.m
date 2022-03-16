@@ -69,8 +69,8 @@ LL_controller = tf([1 -controllerZero], [1 -controllerPole]); % Lead lag control
 
 %% PI Controller
 
-kP = 300e-6; % Should be in the milli to 10k range?
-kI = 0.6; % Should be in the 10's micro range?
+% kP = 300e-6; % Should be in the milli to 10k range? % kI = 0.6; % Should be in the 10's micro range?
+kP = 0.000152; kI = 0.85553;
 pi_gain = 1;
 
 pi_controller = pid(kP, kI, 0);
@@ -126,42 +126,46 @@ y = [Y; y];
 %% Open Loop Results
 
 % Delta unit-step
-figure(1);
-subplot(3,1,1)
+figure;
 plot([0, 0.15, 0.1501, 0.2], [Delta, Delta, Delta+StepSize, Delta+StepSize], 'k', 'LineWidth',2)
 ylim([Delta-0.05 Delta+0.05+StepSize]);
+xlim([0.14 0.16])
 xlabel("Time [s]")
 ylabel("Duty Cycle")
 set(gca,'FontSize',12);
 set(gca,'FontWeight','bold');
 set(gca,'LineWidth',2);
 grid on;
+saveas(gcf,'boost_ol_timedomain_duty.jpg')
 
-subplot(3,1,2)
+figure;
 plot(T,iL, 'k', 'LineWidth',2)
 xlabel("Time [s]")
 ylabel("Current [A]")
+xlim([0.14 0.16])
 set(gca,'FontSize',12);
 set(gca,'FontWeight','bold');
 set(gca,'LineWidth',2);
 grid on;
+saveas(gcf,'boost_ol_timedomain_iL.jpg')
 
-subplot(3,1,3)
+figure;
 plot(T,y, 'k', 'LineWidth',2)
 xlabel("Time [s]")
 ylabel("Voltage [V]")
+xlim([0.14 0.16])
 grid on;
 movegui('northwest');
 set(gca,'FontSize',12);
 set(gca,'FontWeight','bold');
 set(gca,'LineWidth',2);
+saveas(gcf,'boost_ol_timedomain_voltage.jpg')
 
 x0 = 10;
 y0 = 10;
 width = 400;
 height = 800;
-set(gcf,'position',[x0,y0,width,height])
-saveas(gcf,'boost_ol_timedomain.jpg')
+% set(gcf,'position',[x0,y0,width,height])
 
 %% Pre-step Bode Plot
 figure(2);
@@ -193,18 +197,19 @@ set(gca,'LineWidth',2);
 
 figure(5);
 rlocus(boost_OL);
-title(strcat("Pre-Step Root Locus - Closed loop, controller type: ",type))
+% title(strcat("Pre-Step Root Locus - Closed loop, controller type: ",type))
 grid on;
 
 figure(6);
 bode(boost_CL);
-title(strcat("Pre-Step Bode Diagram - Closed loop, controller type: ",type))
+% title(strcat("Pre-Step Bode Diagram - Closed loop, controller type: ",type))
 grid on;
 movegui('east');
-
+%%
 figure(7);
 step(boost_CL, 500e-3)
-title(strcat("Step response - Closed loop, controller type: ", type));
+% title(strcat("Step response - Closed loop, controller type: ", type));
+xlim([0 0.15]);
 grid on;
 movegui('southwest');
 

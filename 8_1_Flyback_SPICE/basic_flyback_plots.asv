@@ -1,0 +1,71 @@
+close all; clear all;
+
+%% VaryVin
+data = xlsread('BasicFlyBackData.xlsx','A2:L20932');
+
+time = data(:,1);
+vout_plus5 = data(:,2);
+vout_plus12 = data(:,3);
+vout_minus5 = data(:,4);
+vout_minus12 = data(:,5);
+vout_33 = data(:,6);
+iout_plus12 = data(:,7);
+iout_plus5 = data(:,8);
+iout_33 = data(:,9);
+iout_ = data(:,10);
+vin6_time = data(:,11);
+vin6_data = data(:,12);
+
+
+figure(1);
+plot(time.*1000, vout_plus5, '-', 'LineWidth',2, 'MarkerSize',1); hold on;
+plot(vout_plus12.*1000, vout_minus5, '-', 'LineWidth',2, 'MarkerSize',1); hold on;
+plot(vin3_time.*1000, vout_33, '-', 'LineWidth',2, 'MarkerSize',1); hold on;
+plot(iout_plus12.*1000, iout_plus5, '-', 'LineWidth',2, 'MarkerSize',1); hold on;
+plot(iout_33.*1000, vin5_data, '-', 'LineWidth',2, 'MarkerSize',1); hold on;
+plot(vin6_time.*1000, vin6_data, '-', 'LineWidth',2, 'MarkerSize',1); hold on;
+legend('100V','150V','200V','250V','300V','350V')
+xlabel('Time(ms)');
+ylabel('V_{out}');
+xlim([0 2.5]);
+set(gca,'FontSize',12);
+set(gca,'FontWeight','bold');
+set(gca,'LineWidth',2);
+
+filename = ['ideal_boost_varyvin_startup.jpg'];
+saveas(gcf,filename)
+
+%% VaryLoad
+
+data = xlsread('simulation_timeresults_varyLoad.xlsx','A2:L41735');
+
+time = data(:,1);
+vout_plus5 = data(:,2);
+vout_plus12 = data(:,3);
+vout_minus5 = data(:,4);
+vin3_time = data(:,5);
+vout_33 = data(:,6);
+iout_plus12 = data(:,7);
+iout_plus5 = data(:,8);
+iout_33 = data(:,9);
+vin5_data = data(:,10);
+vin6_time = data(:,11);
+vin6_data = data(:,12);
+
+figure(2);
+plot(time.*1000, vout_plus5, '-', 'LineWidth',2, 'MarkerSize',1); hold on;
+plot(vout_plus12.*1000, vout_minus5, '-', 'LineWidth',2, 'MarkerSize',1); hold on;
+plot(vin3_time.*1000, vout_33, '-', 'LineWidth',2, 'MarkerSize',1); hold on;
+plot(iout_plus12.*1000, iout_plus5, '-', 'LineWidth',2, 'MarkerSize',1); hold on;
+plot(iout_33.*1000, vin5_data, '-', 'LineWidth',2, 'MarkerSize',1); hold on;
+plot(vin6_time.*1000, vin6_data, '-', 'LineWidth',2, 'MarkerSize',1); hold on;
+legend('100%','90%','80%','70%','60%','50%')
+xlabel('Time(ms)');
+ylabel('V_{out}');
+xlim([0 4]);
+set(gca,'FontSize',12);
+set(gca,'FontWeight','bold');
+set(gca,'LineWidth',2);
+
+filename = ['ideal_boost_varyLoad_startup.jpg'];
+saveas(gcf,filename)
