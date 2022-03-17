@@ -55,10 +55,11 @@ big_d = Delta;
 %%  State Space
 
 % L_2 = k_N^2 * L_1;
+% k_N = I_1/ I_2;
 
 %Use Lm = L1 = L2 for now
 L_1 = L_m1;
-L_2 = L_1;
+L_2 = k_N^2 * L_1;
 
 % On state
 A_on = [-r_eq1/L_1, 0 %fixed
@@ -172,7 +173,7 @@ fb_ss = ss(A, E, C, F);
     %% PI Controller
 
     % kP = -741; kI = -7.179e6; % Should be in the 10's micro range?
-    kP = 0.004; kI = 10;not
+    kP = 0.0004; kI = 0.8;
     pi_gain = 1;
 
     pi_controller = pid(kP, kI, 0);
