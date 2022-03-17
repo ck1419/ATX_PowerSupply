@@ -29,9 +29,10 @@ ripple_vout = 50e-3;
 % Choose R to ensure it draws power as the entire device
 % R = V^2/P
 R_load_list = [97.1e-3 129.4e-3 194.1e-3 388.2e-3];
-load_percentage = [100 75 50 25];
 
-for i=size(R_load_list,2)
+%% Select i for Load percentage to test
+load_percentage = ["100% load" "75% load" "50% load" "25% load"];
+i = 1;
 
     L_eq1 = 0;
     r_eq1 = 1e-3;
@@ -112,70 +113,53 @@ for i=size(R_load_list,2)
 
     % Delta unit-step
     figure(1);
-    plot([0, 0.15, 0.1501, 0.2], [Delta, Delta, Delta+StepSize, Delta+StepSize], 'k-', 'LineWidth',2)
+    subplot(3,1,1)
+    plot([0, 0.15, 0.1501, 0.2], [Delta, Delta, Delta+StepSize, Delta+StepSize])
     ylim([Delta-0.05 Delta+0.05+StepSize]);
     xlabel("Time [s]")
     ylabel("Duty Cycle")
     title("Delta Input")
-    set(gca,'FontSize',12);
-    set(gca,'FontWeight','bold');
-    set(gca,'LineWidth',2);
     xlim([0 0.2]);
     grid on;
 
-    figure(2);
-    plot(T,iL, 'k-', 'LineWidth',2)
+    subplot(3,1,2)
+    plot(T,iL)
     xlabel("Time [s]")
     ylabel("Current [A]")
     title("Current Output")
-    set(gca,'FontSize',12);
-    set(gca,'FontWeight','bold');
-    set(gca,'LineWidth',2);
     xlim([0 0.2]);
     grid on;
 
-    figure(3);
-    plot(T,y, 'k-', 'LineWidth',2)
+    subplot(3,1,3)
+    plot(T,y)
     xlabel("Time [s]")
     ylabel("Voltage [V]")
     title("Voltage Output")
     grid on;
-    set(gca,'FontSize',12);
-    set(gca,'FontWeight','bold');
-    set(gca,'LineWidth',2);
     xlim([0 0.2]);
-    movegui('northwest');
+
+    saveas(gcf,strcat('basic_fb_',load_percentage(i),'_ol_time.jpeg'))
 
     %%
 
     % Pre-step Bode Plot
     figure(4);
     bode(fb_ss);
-    title("Bode plot for FB converter - Open loop, no controller");
+    title(strcat("Bode plot - Open loop, no controller, ", load_percentage(i)));
     grid on;
-    set(gca,'FontSize',12);
-    set(gca,'FontWeight','bold');
-    set(gca,'LineWidth',2);
-    movegui('north');
+    saveas(gcf,strcat('basic_fb_',load_percentage(i),'_ol_bode.jpeg'))
 
     figure(5);
     rlocus(fb_ss);
-    title("Root Locus for FB converter - Closed loop, no controller");
+    title(strcat("Root Locus - Closed loop, no controller, ", load_percentage(i)));
     grid on;
-    set(gca,'FontSize',12);
-    set(gca,'FontWeight','bold');
-    set(gca,'LineWidth',2);
-    movegui('northeast');
+    saveas(gcf,strcat('basic_fb_',load_percentage(i),'_ol_rlocus.jpeg'))
 
-    %%
     figure(6);
-    step(fb_ss, 10e-3)
-    title("Open loop step response - no controller")
+    step(fb_ss, 1e-3)
+    title(strcat("Open loop step response - no controller, ", load_percentage(i)))
     grid on;
-    set(gca,'FontSize',12);
-    set(gca,'FontWeight','bold');
-    set(gca,'LineWidth',2);
-    movegui('west');
+    saveas(gcf,strcat('basic_fb_',load_percentage(i),'_ol_step.jpeg'))
 
     %% Lead lag controller
 
@@ -230,46 +214,19 @@ for i=size(R_load_list,2)
 
     figure(7);
     rlocus(fb_OL);
-    title(strcat("Pre-Step Root Locus - Closed loop, controller type: ",type))
+    title(strcat("Pre-Step Root Locus - Closed loop, ", load_percentage(i)))
     grid on;
-    set(gca,'FontSize',12);
-    set(gca,'FontWeight','bold');
-    set(gca,'LineWidth',2);
+    saveas(gcf,strcat('basic_fb_',load_percentage(i),'_cl_rlocus.jpeg'))
 
     figure(8);
-    [mag,phase,wout] = bode(fb_CL);
-
-    subplot(2,1,1)
-    semilogx(wout, 20*log10(squeeze(mag)), 'k-', 'LineWidth',2)
+    bode(fb_CL);
+    title(strcat("Pre-Step Bode Diagram - Closed loop, ", load_percentage(i)))
     grid on;
-    set(gca,'FontSize',12);
-    set(gca,'FontWeight','bold');
-    set(gca,'LineWidth',2);
-    ylabel('Magnitude (dB)');
-
-    title(strcat("Pre-Step Bode Diagram - Closed loop, controller type: ",type))
-
-    subplot(2,1,2)
-    semilogx(wout, squeeze(phase), 'k-', 'LineWidth',2)
-    grid on;
-    set(gca,'FontSize',12);
-    set(gca,'FontWeight','bold');
-    set(gca,'LineWidth',2);
-    xlabel('Frequency (rad/s)');
-    ylabel('Phase (deg)');
+    saveas(gcf,strcat('basic_fb_',load_percentage(i),'_cl_bode.jpeg'))
 
 
     figure(9);
-    [y_step,time] = step(fb_CL, 500e-3);
-    plot(time*1000, squeeze(y_step), 'k-', 'LineWidth',2);
-    xlim([0 5]);
-    xlabel('Time (ms)');
-    ylabel('Amplitude');
-    title(strcat("Step response - Closed loop, controller type: ", type));
+    step(fb_CL, 1e-3);
+    title(strcat("Step response - Closed loop, ", load_percentage(i)));
     grid on;
-    movegui('southwest');
-    set(gca,'FontSize',12);
-    set(gca,'FontWeight','bold');
-    set(gca,'LineWidth',2);
-
-end
+    saveas(gcf,strcat('basic_fb_',load_percentage(i),'_cl_step.jpeg'))
