@@ -16,15 +16,13 @@ vout_4_data = data(:,8);
 
 %% Output voltages
 figure(1);
-plot(vout_1_time.*1000, vout_1_data, '-', 'LineWidth',2, 'MarkerSize',1); hold on;
-plot(vout_2_time.*1000, vout_2_data, '-', 'LineWidth',2, 'MarkerSize',1); hold on;
-plot(vout_3_time.*1000, vout_3_data, '-', 'LineWidth',2, 'MarkerSize',1); hold on;
-plot(vout_4_time.*1000, vout_4_data, '-', 'LineWidth',2, 'MarkerSize',1); hold on;
+plot(vout_1_time.*1000, vout_1_data); hold on;
+plot(vout_2_time.*1000, vout_2_data); hold on;
+plot(vout_3_time.*1000, vout_3_data); hold on;
+plot(vout_4_time.*1000, vout_4_data); hold on;
 legend('100V, 50% Load', '100V, 100% Load', '350V, 50% Load', '350V, 100% Load')
 xlabel('Time(ms)');
 xlim([0 10]);
 ylabel('V_{out} (V)');
 set(gca,'FontSize',12);
-set(gca,'FontWeight','bold');
-set(gca,'LineWidth',2);
 saveas(gcf,'complete_boost_compare.jpeg')
