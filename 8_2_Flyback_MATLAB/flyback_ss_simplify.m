@@ -172,7 +172,7 @@ fb_ss = ss(A, E, C, F);
     %% PI Controller
 
     % kP = -741; kI = -7.179e6; % Should be in the 10's micro range?
-    kP = 0.004; kI = 10;not
+    kP = 0.004; kI = 10;
     pi_gain = 1;
 
     pi_controller = pid(kP, kI, 0);
