@@ -1,0 +1,38 @@
+Amount		Part Description		Part Name			Price (£ per)	Price (£ Total)
+
+4			100M resistor			MFR50SFBF52-0R1		0.05143			0.20572
+3			20M resistor			CF14JT20M0			0.00687			0.02061
+11			1M resistor				CF18JA1M00			0.00449			0.04939
+2 			300k resistor 			CF18JA300K 			0.00449  		0.00898
+1			150k resistor			CF18JA150K			0.00449			0.00449	
+2 			45k resistor 			CMF5545K000FKEA 	0.05657			0.11314
+2 			1k resistor				CF18JA1K00			0.00449			0.00898
+2 			500 resistor 			MFR25SFBE52-500R 	0.00705			0.0141
+2 			100 resistor 			CF18JA100R 			0.00449			0.00898
+1 			10m resistor			BR1FB10L0			0.25905			0.25905
+
+1			600V 15A NMOS			R6015KNZ			2.04			2.04
+1			650V 30A NMOS			R6530KNZ			3.21			3.21
+2			NMOS gate driver		LTC4441				2.31313			4.62626
+2			OP-AMP					LT1805				5.60682			11.21364
+
+5			600V 20A diode			RFUS20TF6S			1.27000			6.35
+5			30V 40A diode			RBR40NS30AFH		0.96			4.8
+
+5			0.1pF 50V ceramic capacitor			ML03510R1BAT2A		0.118		0.59
+4			1800uF 35V electrolytic capacitor 	B41896C7188M002		0.811		3.244
+2			680uF 450V electrolytic capacitor	ELG687M450AT8AA		7.59		15.18
+2			680uF 35V electrolytic capacitor	ESY687M035AL3AA		0.421		0.842
+1			470nF 630V electrolytic capacitor	890303426008CS		0.89142		0.89142
+2			56uF 50V electrolytic capacitor		B41866C6566M000 	0.127		0.254
+
+
+Resistor Total 		= £0.69344
+NMOS Total 			= £21.0899
+Diode Total 		= £11.15
+Capacitor Total 	= £21.00142
+
+Total W/O Inductors	= £53.93476
+
+
+**Load resistors not included
