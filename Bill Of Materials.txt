@@ -34,3 +34,5 @@ Capacitor Total 	= £21.00142
 
 Total W/O Inductors	= £53.93476
 
+
+**Load resistors not included
