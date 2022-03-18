@@ -30,12 +30,14 @@ f_sw = 100e3;
 I_out = 34;
 ripple_vout = 50e-3;
 
-% Choose R to ensure it draws power as the entire device
+% Choose R to ensure it draws power as the entire device (637.7W, not only 34A)
 % R = V^2/P
-R_load_list = [97.1e-3 129.4e-3 194.1e-3 388.2e-3];
+% R_load_list = [97.1e-3 129.4e-3 194.1e-3 388.2e-3]; % old list
+R_load_list = [0.01708	0.01897	0.02135	0.0244	0.02846	0.03415];
 
 % Select i for Load percentage to test
 load_percentage = ["100% load" "75% load" "50% load" "25% load"];
+load_filename = ["100load" "75load" "50load" "25load"];
 i = 1;
 
 L_eq1 = 0;
@@ -146,7 +148,7 @@ fb_ss = ss(A, E, C, F);
     grid on;
     xlim([0 0.2]);
 
-    %saveas(gcf,strcat('basic_fb_',load_percentage(i),'_ol_time.jpeg'))
+    saveas(gcf,strcat('basic_fb_',load_filename(i),'_ol_time.jpeg'))
 
     %%
 
@@ -155,27 +157,27 @@ fb_ss = ss(A, E, C, F);
     bode(fb_ss);
     title(strcat("Bode plot - Open loop, no controller, ", load_percentage(i)));
     grid on;
-    %saveas(gcf,strcat('basic_fb_',load_percentage(i),'_ol_bode.jpeg'))
+    saveas(gcf,strcat('basic_fb_',load_filename(i),'_ol_bode.jpeg'))
 
     figure(5);
     rlocus(fb_ss);
     title(strcat("Root Locus - Closed loop, no controller, ", load_percentage(i)));
     grid on;
-    %saveas(gcf,strcat('basic_fb_',load_percentage(i),'_ol_rlocus.jpeg'))
+    saveas(gcf,strcat('basic_fb_',load_filename(i),'_ol_rlocus.jpeg'))
 
     figure(6);
     step(fb_ss, 1e-3)
     title(strcat("Open loop step response - no controller, ", load_percentage(i)))
     grid on;
-    %saveas(gcf,strcat('basic_fb_',load_percentage(i),'_ol_step.jpeg'))
+    saveas(gcf,strcat('basic_fb_',load_filename(i),'_ol_step.jpeg'))
 
 
     %% PI Controller
 
     % kP = -741; kI = -7.179e6; % Should be in the 10's micro range?
     % kP = 0.0004; kI = 0.8;
-    kP = 0.07783; kI=20920;
-    pi_gain = 5.65;
+    kP = 0.085; kI=8000;
+    pi_gain = 1;
 
     pi_controller = pid(kP, kI, 0);
 
@@ -195,17 +197,24 @@ fb_ss = ss(A, E, C, F);
     rlocus(fb_OL);
     title(strcat("Pre-Step Root Locus - Closed loop, ", load_percentage(i)))
     grid on;
-    %saveas(gcf,strcat('basic_fb_',load_percentage(i),'_cl_rlocus.jpeg'))
+    saveas(gcf,strcat('basic_fb_',load_filename(i),'_cl_rlocus.jpeg'))
 
     figure(8);
     bode(fb_CL);
     title(strcat("Pre-Step Bode Diagram - Closed loop, ", load_percentage(i)))
     grid on;
-    %saveas(gcf,strcat('basic_fb_',load_percentage(i),'_cl_bode.jpeg'))
+    saveas(gcf,strcat('basic_fb_',load_filename(i),'_cl_bode.jpeg'))
 
 
     figure(9);
     step(fb_CL, 1e-3);
+    xlim([0 0.0005]);
     title(strcat("Step response - Closed loop, ", load_percentage(i)));
     grid on;
-    %saveas(gcf,strcat('basic_fb_',load_percentage(i),'_cl_step.jpeg'))
+    saveas(gcf,strcat('basic_fb_',load_filename(i),'_cl_step.jpeg'))
+    
+    %%
+    % Finds values starting from 0
+    % 5% Settling Threshold
+    startUpInfo = stepinfo(fb_CL, 'SettlingTimeThreshold', 0.05)
+    damp(fb_CL);
