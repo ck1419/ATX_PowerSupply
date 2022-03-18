@@ -61,7 +61,7 @@ harmonics_mat = [frequency(51:50:(40*50)+1)./50 harmonics];
 save('PFC_harmonics.mat','harmonics_mat');
 
 %% FFT Plot
-figure(5)
+figure(1)
 bar(frequency(51:50:(40*50)+1)./50, harmonics, 0.1)
 xlabel('Harmonic Order');
 ylabel('Current (A)');
