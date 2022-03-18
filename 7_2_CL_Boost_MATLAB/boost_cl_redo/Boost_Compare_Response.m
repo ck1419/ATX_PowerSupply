@@ -11,12 +11,12 @@ clc;
 %% Circuit Parameters
 
 R_load_list = [250.9 278.8 313.6 358.8 418.2 501.8];
-load_percentage = ["100% load" "90% load" "80% load" "70% load" "60% load" "50% load"];
-i = 6;
+load_percentage = ["100load" "90load" "80load" "70load" "60load" "50load"];
+i = 1;
 
 V_in = [100 200 300 350];
 V_in_String = ["100V" "200V" "250V" "350V"];
-j = 4;
+j = 1;
 
 
 %% 
@@ -205,12 +205,14 @@ xlim([0 0.02]);
 grid on;
 saveas(gcf,strcat('boost_',load_percentage(i),V_in_String(j),'_cl_step.jpeg'))
 
+damp(boost_CL)
+
 % %% 
 % 
 % % Finds values starting from 0
 % % 5% Settling Threshold
 % startUpInfo = stepinfo(boost_CL, 'SettlingTimeThreshold', 0.05)
-% damp(boost_CL)
+% 
 % 
 % %% Manually find settling time, rise time (10-90%), settling time(5%)
 % 

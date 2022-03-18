@@ -11,7 +11,7 @@ clc;
 %% Circuit Parameters
 
 R_load_list = [250.9 278.8 313.6 358.8 418.2 501.8];
-load_percentage = ["100% load" "90% load" "80% load" "70% load" "60% load" "50% load"];
+load_percentage = ["100load" "90load" "80load" "70load" "60load" "50load"];
 
 V_in = [100 200 300 350];
 V_in_String = ["100V" "200V" "300V" "350V"];
