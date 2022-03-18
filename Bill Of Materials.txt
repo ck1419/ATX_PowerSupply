@@ -14,7 +14,7 @@ Amount		Part Description		Part Name			Price (£ per)	Price (£ Total)
 1			600V 15A NMOS			R6015KNZ			2.04			2.04
 1			650V 30A NMOS			R6530KNZ			3.21			3.21
 2			NMOS gate driver		LTC4441				2.31313			4.62626
-2			OP-AMP					LT1805£5			5.60682			11.21364
+2			OP-AMP					LT1805				5.60682			11.21364
 
 5			600V 20A diode			RFUS20TF6S			1.27000			6.35
 5			30V 40A diode			RBR40NS30AFH		0.96			4.8
