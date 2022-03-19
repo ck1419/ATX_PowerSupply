@@ -32,6 +32,18 @@ L12neg = I(:,6);
 L33 = I(:,7);
 
 
+%% Efficiency
+
+E33 = mean(V33(1000000:end).*L33(1000000:end));
+E5pos = mean(V5pos(1000000:end).*(L5pos(1000000:end)-L33(1000000:end)));
+E12pos = mean(V12pos(1000000:end).*(L12pos(1000000:end)-L5pos(1000000:end)));
+E5neg = mean(V5neg(1000000:end).*L5neg(1000000:end));
+E12neg = mean(V12neg(1000000:end).*(L12neg(1000000:end)-L5neg(1000000:end)));
+Etotal = E33 + E5pos + E12pos + E5neg + E12neg;
+
+Epri = mean(400/sqrt(2)*Lpri(1000000:end));
+Efficiency = Etotal/Epri;   
+
 %% Plot voltages
 
 figure(1)
